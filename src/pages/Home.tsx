@@ -21,12 +21,12 @@ type FeaturedProduct = {
 };
 
 const products: FeaturedProduct[] = [
-  { id: 31, name: "Celestial Pendant", price: "₹4,999", image: product1, category: "Necklaces" },
-  { id: 32, name: "Aurora Hoops", price: "₹3,799", image: product2, category: "Earrings" },
-  { id: 33, name: "Whisper Bracelet", price: "₹3,299", image: product3, category: "Bracelets" },
-  { id: 34, name: "Pearl Grace Ring", price: "₹2,999", image: product4, category: "Rings" },
-  { id: 35, name: "Layered Elegance", price: "₹5,499", image: product5, category: "Jewelry Sets" },
-  { id: 36, name: "Crystal Studs", price: "₹2,499", image: product6, category: "Earrings" },
+  { id: 31, name: "Celestial Pendant", price: "₹899", image: product1, category: "Necklaces" },
+  { id: 32, name: "Aurora Hoops", price: "₹699", image: product2, category: "Earrings" },
+  { id: 33, name: "Whisper Bracelet", price: "₹699", image: product3, category: "Bracelets" },
+  { id: 34, name: "Pearl Grace Ring", price: "₹599", image: product4, category: "Rings" },
+  { id: 35, name: "Layered Elegance", price: "₹999", image: product5, category: "Jewelry Sets" },
+  { id: 36, name: "Crystal Studs", price: "₹499", image: product6, category: "Earrings" },
 ];
 
 const parsePrice = (price: string) => Number(price.replace(/[^0-9.-]+/g, "")) || 0;

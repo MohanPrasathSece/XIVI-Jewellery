@@ -55,53 +55,53 @@ interface Product {
 
 const products: Product[] = [
   // Earrings
-  { id: 1, name: "Teardrop Elegance", price: "₹3,499", category: "Earrings", image: earring1 },
-  { id: 2, name: "Crystal Chandelier", price: "₹5,999", category: "Earrings", image: earring2 },
-  { id: 3, name: "Diamond Huggie Hoops", price: "₹4,299", category: "Earrings", image: earring3 },
-  { id: 4, name: "Pearl Drops", price: "₹3,799", category: "Earrings", image: earring4 },
-  { id: 5, name: "Geometric Studs", price: "₹2,799", category: "Earrings", image: earring5 },
+  { id: 1, name: "Teardrop Elegance", price: "₹699", category: "Earrings", image: earring1 },
+  { id: 2, name: "Crystal Chandelier", price: "₹799", category: "Earrings", image: earring2 },
+  { id: 3, name: "Diamond Huggie Hoops", price: "₹649", category: "Earrings", image: earring3 },
+  { id: 4, name: "Pearl Drops", price: "₹599", category: "Earrings", image: earring4 },
+  { id: 5, name: "Geometric Studs", price: "₹499", category: "Earrings", image: earring5 },
   
   // Necklaces
-  { id: 6, name: "Engraved Bar Necklace", price: "₹4,499", category: "Necklaces", image: necklace1 },
-  { id: 7, name: "Gemstone Choker", price: "₹5,299", category: "Necklaces", image: necklace2 },
-  { id: 8, name: "Y-Shape Lariat", price: "₹4,799", category: "Necklaces", image: necklace3 },
-  { id: 9, name: "Infinity Symbol", price: "₹3,999", category: "Necklaces", image: necklace4 },
-  { id: 10, name: "Diamond Heart Pendant", price: "₹5,499", category: "Necklaces", image: necklace5 },
+  { id: 6, name: "Engraved Bar Necklace", price: "₹899", category: "Necklaces", image: necklace1 },
+  { id: 7, name: "Gemstone Choker", price: "₹949", category: "Necklaces", image: necklace2 },
+  { id: 8, name: "Y-Shape Lariat", price: "₹999", category: "Necklaces", image: necklace3 },
+  { id: 9, name: "Infinity Symbol", price: "₹799", category: "Necklaces", image: necklace4 },
+  { id: 10, name: "Diamond Heart Pendant", price: "₹999", category: "Necklaces", image: necklace5 },
   
   // Bracelets
-  { id: 11, name: "Tennis Bracelet", price: "₹6,999", category: "Bracelets", image: bracelet1 },
-  { id: 12, name: "Engraved Bangle", price: "₹4,999", category: "Bracelets", image: bracelet2 },
-  { id: 13, name: "Charm Bracelet", price: "₹5,799", category: "Bracelets", image: bracelet3 },
-  { id: 14, name: "Geometric Cuff", price: "₹4,299", category: "Bracelets", image: bracelet4 },
-  { id: 15, name: "Beaded Gemstone", price: "₹3,499", category: "Bracelets", image: bracelet5 },
+  { id: 11, name: "Tennis Bracelet", price: "₹799", category: "Bracelets", image: bracelet1 },
+  { id: 12, name: "Engraved Bangle", price: "₹699", category: "Bracelets", image: bracelet2 },
+  { id: 13, name: "Charm Bracelet", price: "₹749", category: "Bracelets", image: bracelet3 },
+  { id: 14, name: "Geometric Cuff", price: "₹699", category: "Bracelets", image: bracelet4 },
+  { id: 15, name: "Beaded Gemstone", price: "₹599", category: "Bracelets", image: bracelet5 },
   
   // Rings
-  { id: 16, name: "Solitaire Statement", price: "₹8,999", category: "Rings", image: ring1 },
-  { id: 17, name: "Stackable Trio", price: "₹4,799", category: "Rings", image: ring2 },
-  { id: 18, name: "Pavé Band", price: "₹5,299", category: "Rings", image: ring3 },
-  { id: 19, name: "Oval Cocktail Ring", price: "₹6,499", category: "Rings", image: ring4 },
-  { id: 20, name: "Delicate Midi Ring", price: "₹2,499", category: "Rings", image: ring5 },
+  { id: 16, name: "Solitaire Statement", price: "₹999", category: "Rings", image: ring1 },
+  { id: 17, name: "Stackable Trio", price: "₹799", category: "Rings", image: ring2 },
+  { id: 18, name: "Pavé Band", price: "₹899", category: "Rings", image: ring3 },
+  { id: 19, name: "Oval Cocktail Ring", price: "₹949", category: "Rings", image: ring4 },
+  { id: 20, name: "Delicate Midi Ring", price: "₹499", category: "Rings", image: ring5 },
   
   // Anklets
-  { id: 21, name: "Charm Anklet", price: "₹2,799", category: "Anklets", image: anklet1 },
-  { id: 22, name: "Crystal Chain", price: "₹3,299", category: "Anklets", image: anklet2 },
-  { id: 23, name: "Layered Bohemian", price: "₹3,799", category: "Anklets", image: anklet3 },
-  { id: 24, name: "Coin Charm Anklet", price: "₹3,499", category: "Anklets", image: anklet4 },
-  { id: 25, name: "Minimalist Single Gem", price: "₹2,299", category: "Anklets", image: anklet5 },
+  { id: 21, name: "Charm Anklet", price: "₹399", category: "Anklets", image: anklet1 },
+  { id: 22, name: "Crystal Chain", price: "₹499", category: "Anklets", image: anklet2 },
+  { id: 23, name: "Layered Bohemian", price: "₹599", category: "Anklets", image: anklet3 },
+  { id: 24, name: "Coin Charm Anklet", price: "₹549", category: "Anklets", image: anklet4 },
+  { id: 25, name: "Minimalist Single Gem", price: "₹299", category: "Anklets", image: anklet5 },
   
   // Jewelry Sets
-  { id: 26, name: "Classic Matching Set", price: "₹9,999", category: "Jewelry Sets", image: set1 },
-  { id: 27, name: "Bridal Collection", price: "₹14,999", category: "Jewelry Sets", image: set2 },
-  { id: 28, name: "Pearl Elegance Set", price: "₹11,499", category: "Jewelry Sets", image: set3 },
-  { id: 29, name: "Layered Statement Set", price: "₹12,999", category: "Jewelry Sets", image: set4 },
-  { id: 30, name: "Delicate Romance Set", price: "₹10,499", category: "Jewelry Sets", image: set5 },
+  { id: 26, name: "Classic Matching Set", price: "₹999", category: "Jewelry Sets", image: set1 },
+  { id: 27, name: "Bridal Collection", price: "₹999", category: "Jewelry Sets", image: set2 },
+  { id: 28, name: "Pearl Elegance Set", price: "₹999", category: "Jewelry Sets", image: set3 },
+  { id: 29, name: "Layered Statement Set", price: "₹999", category: "Jewelry Sets", image: set4 },
+  { id: 30, name: "Delicate Romance Set", price: "₹899", category: "Jewelry Sets", image: set5 },
   // Spotlight items from home
-  { id: 31, name: "Celestial Pendant", price: "₹4,999", category: "Necklaces", image: productHero1, featured: true },
-  { id: 32, name: "Aurora Hoops", price: "₹3,799", category: "Earrings", image: productHero2, featured: true },
-  { id: 33, name: "Whisper Bracelet", price: "₹3,299", category: "Bracelets", image: productHero3, featured: true },
-  { id: 34, name: "Pearl Grace Ring", price: "₹2,999", category: "Rings", image: productHero4, featured: true },
-  { id: 35, name: "Layered Elegance", price: "₹5,499", category: "Jewelry Sets", image: productHero5, featured: true },
-  { id: 36, name: "Crystal Studs", price: "₹2,499", category: "Earrings", image: productHero6, featured: true },
+  { id: 31, name: "Celestial Pendant", price: "₹899", category: "Necklaces", image: productHero1, featured: true },
+  { id: 32, name: "Aurora Hoops", price: "₹699", category: "Earrings", image: productHero2, featured: true },
+  { id: 33, name: "Whisper Bracelet", price: "₹699", category: "Bracelets", image: productHero3, featured: true },
+  { id: 34, name: "Pearl Grace Ring", price: "₹599", category: "Rings", image: productHero4, featured: true },
+  { id: 35, name: "Layered Elegance", price: "₹999", category: "Jewelry Sets", image: productHero5, featured: true },
+  { id: 36, name: "Crystal Studs", price: "₹499", category: "Earrings", image: productHero6, featured: true },
 ];
 
 const categories: Category[] = ["All", "Earrings", "Necklaces", "Bracelets", "Rings", "Anklets", "Jewelry Sets"];
