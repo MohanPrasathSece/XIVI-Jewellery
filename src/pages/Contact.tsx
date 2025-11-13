@@ -34,7 +34,7 @@ const Contact = () => {
   };
 
   return (
-    <main className="min-h-screen pt-20">
+    <main className="min-h-screen pt-16 md:pt-20">
       {/* Header */}
       <section className="py-16 px-4 bg-gradient-champagne">
         <div className="container mx-auto max-w-4xl text-center animate-fade-in">

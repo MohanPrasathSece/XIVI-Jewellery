@@ -33,6 +33,12 @@ import set2 from "@/assets/products/set-2.jpg";
 import set3 from "@/assets/products/set-3.jpg";
 import set4 from "@/assets/products/set-4.jpg";
 import set5 from "@/assets/products/set-5.jpg";
+import productHero1 from "@/assets/product-1.jpg";
+import productHero2 from "@/assets/product-2.jpg";
+import productHero3 from "@/assets/product-3.jpg";
+import productHero4 from "@/assets/product-4.jpg";
+import productHero5 from "@/assets/product-5.jpg";
+import productHero6 from "@/assets/product-6.jpg";
 
 type Category = "All" | "Earrings" | "Necklaces" | "Bracelets" | "Rings" | "Anklets" | "Jewelry Sets";
 
@@ -42,6 +48,7 @@ interface Product {
   price: string;
   category: Category;
   image: string;
+  featured?: boolean;
 }
 
 const products: Product[] = [
@@ -86,6 +93,13 @@ const products: Product[] = [
   { id: 28, name: "Pearl Elegance Set", price: "₹11,499", category: "Jewelry Sets", image: set3 },
   { id: 29, name: "Layered Statement Set", price: "₹12,999", category: "Jewelry Sets", image: set4 },
   { id: 30, name: "Delicate Romance Set", price: "₹10,499", category: "Jewelry Sets", image: set5 },
+  // Spotlight items from home
+  { id: 31, name: "Celestial Pendant", price: "₹4,999", category: "Necklaces", image: productHero1, featured: true },
+  { id: 32, name: "Aurora Hoops", price: "₹3,799", category: "Earrings", image: productHero2, featured: true },
+  { id: 33, name: "Whisper Bracelet", price: "₹3,299", category: "Bracelets", image: productHero3, featured: true },
+  { id: 34, name: "Pearl Grace Ring", price: "₹2,999", category: "Rings", image: productHero4, featured: true },
+  { id: 35, name: "Layered Elegance", price: "₹5,499", category: "Jewelry Sets", image: productHero5, featured: true },
+  { id: 36, name: "Crystal Studs", price: "₹2,499", category: "Earrings", image: productHero6, featured: true },
 ];
 
 const categories: Category[] = ["All", "Earrings", "Necklaces", "Bracelets", "Rings", "Anklets", "Jewelry Sets"];
@@ -138,10 +152,10 @@ const Products = () => {
     requestAnimationFrame(() => scrollToGrid());
   };
 
-  const filteredProducts =
-    selectedCategory === "All"
-      ? products
-      : products.filter((product) => product.category === selectedCategory);
+  const filteredProducts = useMemo(() => {
+    const base = selectedCategory === "All" ? products : products.filter((product) => product.category === selectedCategory);
+    return [...base].sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
+  }, [selectedCategory]);
 
   const handleAddToCart = (productName: string) => {
     const message = encodeURIComponent(

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, ChevronRight } from "lucide-react";
+import { Menu, X, ChevronRight, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Navigation = () => {
@@ -23,8 +23,8 @@ const Navigation = () => {
   
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-xl border-b border-border/50">
-      <nav className="container mx-auto px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center justify-between w-full md:w-auto gap-4">
+      <nav className="container mx-auto px-4 py-3 flex items-center justify-between md:relative">
+        <div className="flex items-center gap-4">
           <button
             type="button"
             onClick={() => {
@@ -38,23 +38,9 @@ const Navigation = () => {
           >
             Lumi & Co.
           </button>
-
-          <button
-            type="button"
-            aria-expanded={isMobileMenuOpen}
-            aria-label="Toggle menu"
-            className={cn(
-              "inline-flex h-11 w-11 items-center justify-center rounded-xl shadow-soft",
-              "bg-gradient-rose text-primary-foreground border border-primary/20 backdrop-blur-md",
-              "transition-all hover:shadow-glow hover:-translate-y-0.5 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:hidden"
-            )}
-            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-          >
-            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
         </div>
 
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-8 md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2">
           {links.map((link) => (
             <Link
               key={link.href}
@@ -67,6 +53,35 @@ const Navigation = () => {
               {link.label}
             </Link>
           ))}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            aria-label="View cart"
+            className={cn(
+              "inline-flex h-11 w-11 items-center justify-center rounded-xl shadow-soft",
+              "bg-white/70 text-foreground border border-white/40 backdrop-blur-md",
+              "transition-all hover:shadow-glow hover:-translate-y-0.5 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            )}
+          >
+            <ShoppingBag className="h-5 w-5" />
+          </button>
+
+          <button
+            type="button"
+            aria-expanded={isMobileMenuOpen}
+            aria-label="Toggle menu"
+            className={cn(
+              "inline-flex h-11 w-11 items-center justify-center rounded-xl shadow-soft",
+              "bg-gradient-rose text-primary-foreground border border-primary/20 backdrop-blur-md",
+              "transition-all hover:shadow-glow hover:-translate-y-0.5 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:hidden",
+              "animate-menu-bounce"
+            )}
+            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+          >
+            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
       </nav>
 

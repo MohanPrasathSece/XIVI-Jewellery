@@ -2,7 +2,7 @@ import aboutBanner from "@/assets/about-banner.jpg";
 
 const About = () => {
   return (
-    <main className="min-h-screen pt-20">
+    <main className="min-h-screen pt-16 md:pt-20">
       {/* Banner Section */}
       <section className="relative h-96 overflow-hidden">
         <div

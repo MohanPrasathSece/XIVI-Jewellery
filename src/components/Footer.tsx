@@ -65,17 +65,14 @@ const Footer = () => {
         </div>
         
         <div className="mt-8 pt-6 border-t border-border/30 text-center">
-          <p className="text-xs text-muted-foreground space-x-1">
-            <span> {new Date().getFullYear()} Lumi & Co. All rights reserved.</span>
-            <a
-              href="https://www.zyradigitals.info"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium text-primary hover:text-primary/80 transition-colors"
-            >
-              Created by Zyra Digitals
-            </a>
-          </p>
+          <a
+            href="https://www.zyradigitals.info"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs font-medium text-primary hover:text-primary/80 transition-colors"
+          >
+            Created by Zyra Digitals
+          </a>
         </div>
       </div>
     </footer>
