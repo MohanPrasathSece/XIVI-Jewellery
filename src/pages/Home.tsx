@@ -28,7 +28,7 @@ const Home = () => {
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[80vh] md:h-screen flex items-center justify-start md:justify-center overflow-hidden pt-24 pb-16 md:pt-0 md:pb-0">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${heroImage})` }}
@@ -37,19 +37,19 @@ const Home = () => {
         </div>
         
         <div className="relative z-10 text-center px-4 animate-fade-in-slow">
-          <h1 className="font-cormorant text-5xl md:text-7xl font-bold mb-6 text-foreground">
+          <h1 className="font-cormorant text-3xl sm:text-4xl md:text-7xl font-bold mb-5 md:mb-6 text-foreground">
             Radiance for the modern muse
             <br />
             <span className="text-gradient-rose">crafted to captivate</span>
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+          <p className="text-sm md:text-xl text-muted-foreground max-w-2xl mx-auto mb-6 md:mb-8">
             Discover limited-edition adornments that balance sculptural lines with fluid femininity.
             Each Lumi signature is designed to move with you, elevating every moment with effortless luxury.
           </p>
           <Button
             variant="default"
-            size="lg"
-            className="bg-gradient-rose hover:shadow-glow transition-all duration-500 rounded-full px-8"
+            size="sm"
+            className="bg-gradient-rose hover:shadow-glow transition-all duration-500 rounded-full px-6 md:px-8"
             onClick={() => document.getElementById("collection")?.scrollIntoView({ behavior: "smooth" })}
           >
             Explore Collection
@@ -58,16 +58,16 @@ const Home = () => {
       </section>
 
       {/* Featured Collection */}
-      <section id="collection" className="py-24 px-4 bg-gradient-champagne">
+      <section id="collection" className="py-12 md:py-24 px-4 bg-gradient-champagne">
         <div className="container mx-auto">
-          <div className="text-center mb-16 animate-fade-in">
-            <h2 className="font-cormorant text-4xl md:text-5xl font-semibold mb-4">
+          <div className="text-center mb-10 md:mb-16 animate-fade-in">
+            <h2 className="font-cormorant text-2xl sm:text-3xl md:text-5xl font-semibold mb-3 md:mb-4">
               Spotlight Collection
             </h2>
             <div className="w-24 h-1 bg-gradient-rose mx-auto rounded-full" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8 max-w-6xl mx-auto">
             {products.map((product, index) => (
               <div
                 key={product.id}
@@ -81,11 +81,11 @@ const Home = () => {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                 </div>
-                <div className="p-6">
-                  <h3 className="font-cormorant text-xl font-medium mb-2">
+                <div className="p-4 md:p-6">
+                  <h3 className="font-cormorant text-base md:text-xl font-medium mb-2">
                     {product.name}
                   </h3>
-                  <p className="text-primary text-lg font-medium mb-4">
+                  <p className="text-primary text-sm md:text-lg font-medium mb-4">
                     {product.price}
                   </p>
                   <Button
@@ -103,14 +103,14 @@ const Home = () => {
       </section>
 
       {/* Brand Story */}
-      <section className="py-24 px-4">
+      <section className="py-12 md:py-24 px-4">
         <div className="container mx-auto max-w-4xl text-center animate-fade-in">
-          <h2 className="font-cormorant text-4xl md:text-5xl font-semibold mb-8">
+          <h2 className="font-cormorant text-2xl sm:text-4xl md:text-5xl font-semibold mb-5 md:mb-8">
             Bespoke artistry, luminous allure
             <br />
             <span className="text-gradient-rose">designed for your signature style</span>
           </h2>
-          <p className="text-lg text-muted-foreground leading-relaxed">
+          <p className="text-sm md:text-lg text-muted-foreground leading-relaxed">
             Each Lumi piece is dreamt up in our studio and brought to life by master artisans.
             We blend responsibly sourced stones with satin-finished metals, creating heirloom-worthy
             designs that feel unapologetically contemporary. From an intimate soirée to everyday
@@ -120,28 +120,28 @@ const Home = () => {
       </section>
 
       {/* Highlights */}
-      <section className="py-20 px-4">
+      <section className="py-12 md:py-20 px-4">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-card rounded-2xl p-8 shadow-soft hover:shadow-glow transition-smooth">
-              <div className="w-12 h-12 rounded-full bg-gradient-rose text-primary-foreground flex items-center justify-center mb-4 shadow-glow">
-                <Sparkles className="w-6 h-6" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            <div className="bg-card rounded-2xl p-5 md:p-8 shadow-soft hover:shadow-glow transition-smooth">
+              <div className="w-9 h-9 md:w-12 md:h-12 rounded-full bg-gradient-rose text-primary-foreground flex items-center justify-center mb-4 shadow-glow">
+                <Sparkles className="w-4 h-4 md:w-6 md:h-6" />
               </div>
-              <h3 className="font-cormorant text-2xl mb-2">Couture Craftsmanship</h3>
+              <h3 className="font-cormorant text-lg md:text-2xl mb-2">Couture Craftsmanship</h3>
               <p className="text-muted-foreground">Individually finished details echo the intimacy of atelier-made jewels for a polished, artful finish.</p>
             </div>
-            <div className="bg-card rounded-2xl p-8 shadow-soft hover:shadow-glow transition-smooth">
-              <div className="w-12 h-12 rounded-full bg-gradient-rose text-primary-foreground flex items-center justify-center mb-4 shadow-glow">
-                <ShieldCheck className="w-6 h-6" />
+            <div className="bg-card rounded-2xl p-5 md:p-8 shadow-soft hover:shadow-glow transition-smooth">
+              <div className="w-9 h-9 md:w-12 md:h-12 rounded-full bg-gradient-rose text-primary-foreground flex items-center justify-center mb-4 shadow-glow">
+                <ShieldCheck className="w-4 h-4 md:w-6 md:h-6" />
               </div>
-              <h3 className="font-cormorant text-2xl mb-2">Elevated Materials</h3>
+              <h3 className="font-cormorant text-lg md:text-2xl mb-2">Elevated Materials</h3>
               <p className="text-muted-foreground">Lustrous vermeil, lab-grown brilliance, and hypoallergenic bases deliver luxuriant wear every day.</p>
             </div>
-            <div className="bg-card rounded-2xl p-8 shadow-soft hover:shadow-glow transition-smooth">
-              <div className="w-12 h-12 rounded-full bg-gradient-rose text-primary-foreground flex items-center justify-center mb-4 shadow-glow">
-                <Leaf className="w-6 h-6" />
+            <div className="bg-card rounded-2xl p-5 md:p-8 shadow-soft hover:shadow-glow transition-smooth">
+              <div className="w-9 h-9 md:w-12 md:h-12 rounded-full bg-gradient-rose text-primary-foreground flex items-center justify-center mb-4 shadow-glow">
+                <Leaf className="w-4 h-4 md:w-6 md:h-6" />
               </div>
-              <h3 className="font-cormorant text-2xl mb-2">Considered Luxury</h3>
+              <h3 className="font-cormorant text-lg md:text-2xl mb-2">Considered Luxury</h3>
               <p className="text-muted-foreground">Sustainably sourced gemstones and refined packaging ensure beauty that honours people and planet.</p>
             </div>
           </div>
@@ -149,15 +149,15 @@ const Home = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-24 px-4 bg-gradient-champagne">
+      <section className="py-12 md:py-24 px-4 bg-gradient-champagne">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-12">
-            <h2 className="font-cormorant text-4xl md:text-5xl font-semibold">Celebrated by modern tastemakers</h2>
+          <div className="text-center mb-8 md:mb-12">
+            <h2 className="font-cormorant text-2xl sm:text-4xl md:text-5xl font-semibold">Celebrated by modern tastemakers</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-8">
             {["The detailing rivals my bespoke pieces—every edge feels intentional.", "Effortlessly chic; I layer them from boardroom to after-hours without missing a beat.", "Lumi captures that rare blend of subtlety and statement—I'm constantly asked about them."].map((quote, i) => (
-              <div key={i} className="bg-card rounded-2xl p-6 shadow-soft hover:shadow-glow transition-smooth">
-                <p className="text-muted-foreground mb-4">“{quote}”</p>
+              <div key={i} className="bg-card rounded-2xl p-4 md:p-6 shadow-soft hover:shadow-glow transition-smooth">
+                <p className="text-muted-foreground text-sm md:text-base mb-4">“{quote}”</p>
                 <div className="h-1 w-16 bg-gradient-rose rounded-full" />
               </div>
             ))}
@@ -166,11 +166,11 @@ const Home = () => {
       </section>
 
       {/* Newsletter CTA */}
-      <section className="py-20 px-4">
+      <section className="py-12 md:py-20 px-4">
         <div className="container mx-auto max-w-3xl text-center">
-          <h3 className="font-cormorant text-3xl md:text-4xl mb-4">Enter the Lumi inner circle</h3>
-          <p className="text-muted-foreground mb-6">Receive private previews, curated styling notes, and invitations to limited releases.</p>
-          <div className="flex gap-3 justify-center max-w-xl mx-auto">
+          <h3 className="font-cormorant text-2xl md:text-4xl mb-3 md:mb-4">Enter the Lumi inner circle</h3>
+          <p className="text-muted-foreground text-sm md:text-base mb-5 md:mb-6">Receive private previews, curated styling notes, and invitations to limited releases.</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-xl mx-auto">
             <input
               type="email"
               placeholder="Enter your email"
