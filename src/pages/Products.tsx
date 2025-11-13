@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/context/cart";
+import { useToast } from "@/hooks/use-toast";
 
 // Import all product images
 import earring1 from "@/assets/products/earring-1.jpg";
@@ -107,6 +109,8 @@ const categories: Category[] = ["All", "Earrings", "Necklaces", "Bracelets", "Ri
 const Products = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { addItem } = useCart();
+  const { toast } = useToast();
   const queryCategory = useMemo(() => {
     const params = new URLSearchParams(location.search);
     const categoryParam = params.get("category");
@@ -157,11 +161,20 @@ const Products = () => {
     return [...base].sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
   }, [selectedCategory]);
 
-  const handleAddToCart = (productName: string) => {
-    const message = encodeURIComponent(
-      `Hi, I'd like to order the ${productName} from Lumi & Co.`
-    );
-    window.open(`https://wa.me/919025421149?text=${message}`, "_blank");
+  const parsePrice = (price: string) => Number(price.replace(/[^0-9.-]+/g, "")) || 0;
+
+  const handleAddToCart = (product: Product) => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: parsePrice(product.price),
+      image: product.image,
+      quantity: 1,
+    });
+    toast({
+      title: "Added to your cart",
+      description: `${product.name} now awaits in your Lumi collection.`,
+    });
   };
 
   return (
@@ -238,7 +251,7 @@ const Products = () => {
                   <Button
                     variant="outline"
                     className="w-full border-primary text-primary hover:bg-gradient-rose hover:text-primary-foreground hover:border-transparent transition-all duration-300"
-                    onClick={() => handleAddToCart(product.name)}
+                    onClick={() => handleAddToCart(product)}
                   >
                     Add to Cart
                   </Button>

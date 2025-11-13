@@ -64,6 +64,10 @@ const Navigation = () => {
               "bg-white/70 text-foreground border border-white/40 backdrop-blur-md",
               "transition-all hover:shadow-glow hover:-translate-y-0.5 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             )}
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              navigate("/cart");
+            }}
           >
             <ShoppingBag className="h-5 w-5" />
           </button>

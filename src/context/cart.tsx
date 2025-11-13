@@ -54,6 +54,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
 interface CartContextValue {
   items: CartItem[];
   subtotal: number;
+  totalQuantity: number;
   addItem: (item: Omit<CartItem, "quantity"> & { quantity?: number }) => void;
   removeItem: (id: CartItem["id"]) => void;
   updateQuantity: (id: CartItem["id"], quantity: number) => void;
@@ -89,11 +90,16 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     () => state.items.reduce((total, item) => total + item.price * item.quantity, 0),
     [state.items],
   );
+  const totalQuantity = useMemo(
+    () => state.items.reduce((total, item) => total + item.quantity, 0),
+    [state.items],
+  );
 
   const value = useMemo(
     () => ({
       items: state.items,
       subtotal,
+      totalQuantity,
       addItem: ({ quantity = 1, ...item }: Omit<CartItem, "quantity"> & { quantity?: number }) => {
         dispatch({ type: "ADD_ITEM", payload: { ...item, quantity } });
       },

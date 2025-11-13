@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { useCart } from "@/context/cart";
 import heroImage from "@/assets/hero-jewelry.jpg";
 import product1 from "@/assets/product-1.jpg";
 import product2 from "@/assets/product-2.jpg";
@@ -20,18 +21,21 @@ type FeaturedProduct = {
 };
 
 const products: FeaturedProduct[] = [
-  { id: 1, name: "Celestial Pendant", price: "₹4,999", image: product1, category: "Necklaces" },
-  { id: 2, name: "Aurora Hoops", price: "₹3,799", image: product2, category: "Earrings" },
-  { id: 3, name: "Whisper Bracelet", price: "₹3,299", image: product3, category: "Bracelets" },
-  { id: 4, name: "Pearl Grace Ring", price: "₹2,999", image: product4, category: "Rings" },
-  { id: 5, name: "Layered Elegance", price: "₹5,499", image: product5, category: "Jewelry Sets" },
-  { id: 6, name: "Crystal Studs", price: "₹2,499", image: product6, category: "Earrings" },
+  { id: 31, name: "Celestial Pendant", price: "₹4,999", image: product1, category: "Necklaces" },
+  { id: 32, name: "Aurora Hoops", price: "₹3,799", image: product2, category: "Earrings" },
+  { id: 33, name: "Whisper Bracelet", price: "₹3,299", image: product3, category: "Bracelets" },
+  { id: 34, name: "Pearl Grace Ring", price: "₹2,999", image: product4, category: "Rings" },
+  { id: 35, name: "Layered Elegance", price: "₹5,499", image: product5, category: "Jewelry Sets" },
+  { id: 36, name: "Crystal Studs", price: "₹2,499", image: product6, category: "Earrings" },
 ];
+
+const parsePrice = (price: string) => Number(price.replace(/[^0-9.-]+/g, "")) || 0;
 
 const Home = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
+  const { addItem } = useCart();
   const [email, setEmail] = useState("");
 
   useEffect(() => {
@@ -42,11 +46,19 @@ const Home = () => {
     }
   }, [location.state, location.pathname, navigate]);
 
-  const handleAddToCart = (productName: string) => {
-    const message = encodeURIComponent(
-      `Hi, I'd like to order ${productName} from Lumi & Co.`
-    );
-    window.open(`https://wa.me/919025421149?text=${message}`, "_blank");
+  const handleAddToCart = (product: FeaturedProduct) => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: parsePrice(product.price),
+      image: product.image,
+      quantity: 1,
+    });
+
+    toast({
+      title: "Added to your cart",
+      description: `${product.name} now awaits in your Lumi collection.`,
+    });
   };
 
   const handleNewsletterSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -152,7 +164,7 @@ const Home = () => {
                       className="w-full border-primary text-primary hover:bg-gradient-rose hover:text-primary-foreground hover:border-transparent transition-all duration-300"
                       onClick={(event) => {
                         event.stopPropagation();
-                        handleAddToCart(product.name);
+                        handleAddToCart(product);
                       }}
                     >
                       Add to Cart
