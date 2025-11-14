@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, ChevronRight, ShoppingBag } from "lucide-react";
+import { useCart } from "@/context/cart";
 import { cn } from "@/lib/utils";
 
 const Navigation = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { totalQuantity } = useCart();
+  const hasCartItems = totalQuantity > 0;
+  const displayQuantity = totalQuantity > 99 ? "99+" : totalQuantity.toString();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -58,9 +62,9 @@ const Navigation = () => {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            aria-label="View cart"
+            aria-label={`View cart${hasCartItems ? ` with ${totalQuantity} item${totalQuantity === 1 ? "" : "s"}` : ""}`}
             className={cn(
-              "inline-flex h-11 w-11 items-center justify-center rounded-xl shadow-soft",
+              "relative inline-flex h-11 w-11 items-center justify-center rounded-xl shadow-soft",
               "bg-white/70 text-foreground border border-white/40 backdrop-blur-md",
               "transition-all hover:shadow-glow hover:-translate-y-0.5 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             )}
@@ -70,6 +74,14 @@ const Navigation = () => {
             }}
           >
             <ShoppingBag className="h-5 w-5" />
+            {hasCartItems ? (
+              <span
+                className="absolute -top-1 -right-1 min-w-[1.5rem] h-6 px-1 rounded-full bg-primary text-primary-foreground text-xs font-semibold flex items-center justify-center shadow-soft ring-2 ring-background"
+                aria-hidden
+              >
+                {displayQuantity}
+              </span>
+            ) : null}
           </button>
 
           <button

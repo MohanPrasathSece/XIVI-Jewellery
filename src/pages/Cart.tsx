@@ -321,7 +321,7 @@ const Cart = () => {
                 </p>
               </div>
 
-              <div className="space-y-3 text-sm text-muted-foreground">
+              <div className="space-y-1.5 text-sm text-muted-foreground">
                 <div className="flex items-center justify-between">
                   <span>Subtotal</span>
                   <span>{formattedSubtotal}</span>
@@ -330,7 +330,7 @@ const Cart = () => {
                   <span>Shipping</span>
                   <span>{hasItems ? "Calculated at checkout" : "–"}</span>
                 </div>
-                <div className="flex items-center justify-between font-medium text-foreground text-base border-t border-border/50 pt-3">
+                <div className="flex items-center justify-between font-medium text-foreground text-base border-t border-border/50 pt-2.5">
                   <span>Total items</span>
                   <span>{totalQuantity}</span>
                 </div>
