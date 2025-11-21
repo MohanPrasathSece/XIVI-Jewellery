@@ -7,7 +7,7 @@ interface CartItem {
   image: string;
   quantity: number;
 }
-
+//new
 type CartAction =
   | { type: "ADD_ITEM"; payload: CartItem }
   | { type: "REMOVE_ITEM"; payload: { id: CartItem["id"] } }
