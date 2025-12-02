@@ -53,6 +53,7 @@ const Cart = () => {
   const [address, setAddress] = useState(createInitialAddress());
   const [notes, setNotes] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isRazorpayLoading, setIsRazorpayLoading] = useState(false);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const hasItems = items.length > 0;
 
@@ -159,6 +160,7 @@ const Cart = () => {
         throw new Error("Payment gateway is not configured correctly.");
       }
 
+      setIsRazorpayLoading(true);
       const checkout = await openRazorpayCheckout({
         key: razorpayKey,
         amount,
@@ -214,8 +216,10 @@ const Cart = () => {
         },
       });
 
+      setIsRazorpayLoading(false);
       (checkout as any)?.on?.("payment.failed", (event: any) => {
         setIsProcessing(false);
+        setIsRazorpayLoading(false);
         const description = event?.error?.description || "Payment was not completed.";
         toast({ title: "Payment failed", description, variant: "destructive" });
       });
@@ -224,6 +228,7 @@ const Cart = () => {
       toast({ title: "Checkout error", description: message, variant: "destructive" });
     } finally {
       setIsProcessing(false);
+      setIsRazorpayLoading(false);
     }
   };
 
@@ -417,10 +422,14 @@ const Cart = () => {
                 <div className="space-y-3">
                   <Button
                     className="w-full rounded-full bg-gradient-rose text-primary-foreground hover:shadow-glow"
-                    disabled={!hasItems || isProcessing}
+                    disabled={!hasItems || isProcessing || isRazorpayLoading}
                     onClick={handleCheckout}
                   >
-                    {isProcessing ? "Processing..." : "Proceed to checkout"}
+                    {isProcessing
+                      ? "Processing..."
+                      : isRazorpayLoading
+                      ? "Opening payment..."
+                      : "Proceed to checkout"}
                   </Button>
                   <Button
                     variant="ghost"
