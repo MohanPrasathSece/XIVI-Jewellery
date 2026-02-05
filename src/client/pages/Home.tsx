@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/context/cart";
@@ -203,12 +204,29 @@ const Home = () => {
           </div>
 
           <div className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8 max-w-6xl mx-auto">
-              {products.map((product, index) => (
-                <div
+            <motion.div
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={{
+                hidden: { opacity: 0 },
+                show: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.1,
+                  }
+                }
+              }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8 max-w-6xl mx-auto"
+            >
+              {products.map((product) => (
+                <motion.div
                   key={product.id}
-                  className="group bg-card rounded-2xl overflow-hidden shadow-soft hover:shadow-glow hover-lift transition-all duration-500 animate-fade-in cursor-pointer"
-                  style={{ animationDelay: `${index * 100}ms` }}
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+                  }}
+                  className="group bg-card rounded-2xl overflow-hidden shadow-soft hover:shadow-glow hover-lift transition-all duration-500 cursor-pointer"
                   role="button"
                   tabIndex={0}
                   onClick={() => handleProductNavigation(product.category)}
@@ -245,9 +263,9 @@ const Home = () => {
                       Add to Cart
                     </Button>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
 
             <div className="flex justify-center">
               <Button
@@ -281,68 +299,106 @@ const Home = () => {
       {/* Highlights */}
       <section className="py-12 md:py-20 px-4">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            <div className="bg-card rounded-2xl p-5 md:p-8 shadow-soft hover:shadow-glow transition-smooth text-center">
-              <div className="w-9 h-9 md:w-12 md:h-12 rounded-full bg-gradient-rose text-primary-foreground flex items-center justify-center mb-4 shadow-glow mx-auto">
-                <Sparkles className="w-4 h-4 md:w-6 md:h-6" />
-              </div>
-              <h3 className="font-cormorant text-lg md:text-2xl mb-2">925 Pure Silver</h3>
-              <p className="text-muted-foreground">Only the highest quality 925 sterling silver</p>
+          {/* Highlights */}
+          <section className="py-12 md:py-20 px-4">
+            <div className="container mx-auto max-w-6xl">
+              <motion.div
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-50px" }}
+                variants={{
+                  hidden: { opacity: 0 },
+                  show: {
+                    opacity: 1,
+                    transition: { staggerChildren: 0.15 }
+                  }
+                }}
+                className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8"
+              >
+                {[
+                  { icon: <Sparkles className="w-4 h-4 md:w-6 md:h-6" />, title: "925 Pure Silver", text: "Only the highest quality 925 sterling silver" },
+                  { icon: <ShieldCheck className="w-4 h-4 md:w-6 md:h-6" />, title: "Handcrafted", text: "Each piece is made with artisan precision" },
+                  { icon: <Leaf className="w-4 h-4 md:w-6 md:h-6" />, title: "Timeless", text: "Designs that transcend fleeting trends" },
+                ].map((highlight, i) => (
+                  <motion.div
+                    key={i}
+                    variants={{
+                      hidden: { opacity: 0, y: 20 },
+                      show: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+                    }}
+                    className="bg-card rounded-2xl p-5 md:p-8 shadow-soft hover:shadow-glow transition-smooth text-center"
+                  >
+                    <div className="w-9 h-9 md:w-12 md:h-12 rounded-full bg-gradient-rose text-primary-foreground flex items-center justify-center mb-4 shadow-glow mx-auto">
+                      {highlight.icon}
+                    </div>
+                    <h3 className="font-cormorant text-lg md:text-2xl mb-2">{highlight.title}</h3>
+                    <p className="text-muted-foreground">{highlight.text}</p>
+                  </motion.div>
+                ))}
+              </motion.div>
             </div>
-            <div className="bg-card rounded-2xl p-5 md:p-8 shadow-soft hover:shadow-glow transition-smooth text-center">
-              <div className="w-9 h-9 md:w-12 md:h-12 rounded-full bg-gradient-rose text-primary-foreground flex items-center justify-center mb-4 shadow-glow mx-auto">
-                <ShieldCheck className="w-4 h-4 md:w-6 md:h-6" />
-              </div>
-              <h3 className="font-cormorant text-lg md:text-2xl mb-2">Handcrafted</h3>
-              <p className="text-muted-foreground">Each piece is made with artisan precision</p>
-            </div>
-            <div className="bg-card rounded-2xl p-5 md:p-8 shadow-soft hover:shadow-glow transition-smooth text-center">
-              <div className="w-9 h-9 md:w-12 md:h-12 rounded-full bg-gradient-rose text-primary-foreground flex items-center justify-center mb-4 shadow-glow mx-auto">
-                <Leaf className="w-4 h-4 md:w-6 md:h-6" />
-              </div>
-              <h3 className="font-cormorant text-lg md:text-2xl mb-2">Timeless</h3>
-              <p className="text-muted-foreground">Designs that transcend fleeting trends</p>
-            </div>
-          </div>
-        </div>
-      </section>
+          </section>
 
-      {/* Testimonials */}
-      <section className="py-12 md:py-24 px-4 bg-gradient-champagne">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-8 md:mb-12">
-            <h2 className="font-cormorant text-2xl sm:text-4xl md:text-5xl font-semibold">Celebrated by modern tastemakers</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-8">
-            {["The detailing rivals my bespoke pieces—every edge feels intentional.", "Effortlessly chic; I layer them from boardroom to after-hours without missing a beat.", "XIVI captures that rare blend of subtlety and statement—I'm constantly asked about them."].map((quote, i) => (
-              <div key={i} className="bg-card rounded-2xl p-4 md:p-6 shadow-soft hover:shadow-glow transition-smooth">
-                <p className="text-muted-foreground text-sm md:text-base mb-4">“{quote}”</p>
-                <div className="h-1 w-16 bg-gradient-rose rounded-full" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+          {/* Testimonials */}
+          <section className="py-12 md:py-24 px-4 bg-gradient-champagne">
+            <div className="container mx-auto max-w-6xl">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-center mb-8 md:mb-12"
+              >
+                <h2 className="font-cormorant text-2xl sm:text-4xl md:text-5xl font-semibold">Celebrated by modern tastemakers</h2>
+              </motion.div>
+              <motion.div
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+                variants={{
+                  hidden: { opacity: 0 },
+                  show: {
+                    opacity: 1,
+                    transition: { staggerChildren: 0.2 }
+                  }
+                }}
+                className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-8"
+              >
+                {["The detailing rivals my bespoke pieces—every edge feels intentional.", "Effortlessly chic; I layer them from boardroom to after-hours without missing a beat.", "XIVI captures that rare blend of subtlety and statement—I'm constantly asked about them."].map((quote, i) => (
+                  <motion.div
+                    key={i}
+                    variants={{
+                      hidden: { opacity: 0, scale: 0.95 },
+                      show: { opacity: 1, scale: 1, transition: { duration: 0.5 } }
+                    }}
+                    className="bg-card rounded-2xl p-4 md:p-6 shadow-soft hover:shadow-glow transition-smooth"
+                  >
+                    <p className="text-muted-foreground text-sm md:text-base mb-4">“{quote}”</p>
+                    <div className="h-1 w-16 bg-gradient-rose rounded-full" />
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
+          </section>
 
-      {/* Newsletter CTA */}
-      <section className="py-12 md:py-20 px-4">
-        <div className="container mx-auto max-w-3xl text-center">
-          <h3 className="font-cormorant text-2xl md:text-4xl mb-3 md:mb-4">Enter the XIVI inner circle</h3>
-          <p className="text-muted-foreground text-sm md:text-base mb-5 md:mb-6">Receive private previews, curated silver styling notes, and invitations to limited releases.</p>
-          <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3 justify-center max-w-xl mx-auto">
-            <input
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              placeholder="Enter your email"
-              className="flex-1 min-w-0 rounded-full border bg-background px-5 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <Button type="submit" className="rounded-full px-6 bg-gradient-rose text-primary-foreground hover:shadow-glow">Subscribe</Button>
-          </form>
-        </div>
-      </section>
-    </main>
-  );
+          {/* Newsletter CTA */}
+          <section className="py-12 md:py-20 px-4">
+            <div className="container mx-auto max-w-3xl text-center">
+              <h3 className="font-cormorant text-2xl md:text-4xl mb-3 md:mb-4">Enter the XIVI inner circle</h3>
+              <p className="text-muted-foreground text-sm md:text-base mb-5 md:mb-6">Receive private previews, curated silver styling notes, and invitations to limited releases.</p>
+              <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3 justify-center max-w-xl mx-auto">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  placeholder="Enter your email"
+                  className="flex-1 min-w-0 rounded-full border bg-background px-5 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                <Button type="submit" className="rounded-full px-6 bg-gradient-rose text-primary-foreground hover:shadow-glow">Subscribe</Button>
+              </form>
+            </div>
+          </section>
+        </main>
+        );
 };
 
-export default Home;
+        export default Home;
