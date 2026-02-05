@@ -59,7 +59,23 @@ export const createOrder = async (req, res) => {
   try {
     const razorpayClient = getRazorpayClient();
     if (!razorpayClient) {
-      return res.status(500).json({ error: "Payment gateway is not configured." });
+      const missing = [];
+      if (!process.env.RAZORPAY_KEY_ID) missing.push("RAZORPAY_KEY_ID");
+      if (!process.env.RAZORPAY_KEY_SECRET) missing.push("RAZORPAY_KEY_SECRET");
+      return res.status(500).json({
+        error: "Payment gateway not configured",
+        details: `Missing: ${missing.join(", ")}. Please add these to your Vercel Environment Variables.`
+      });
+    }
+
+    if (!supabase) {
+      const missing = [];
+      if (!process.env.VITE_SUPABASE_URL) missing.push("VITE_SUPABASE_URL");
+      if (!process.env.VITE_SUPABASE_ANON_KEY) missing.push("VITE_SUPABASE_ANON_KEY");
+      return res.status(500).json({
+        error: "Database not configured",
+        details: `Missing: ${missing.join(", ")}. Please add these to your Vercel Environment Variables.`
+      });
     }
 
     const validatedData = verifyRequiredFields(req.body);

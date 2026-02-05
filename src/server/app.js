@@ -35,12 +35,12 @@ export const corsOptions = {
         return origin.endsWith(suffix);
       }
       return allowed === origin;
-    });
+    }) || (process.env.VERCEL === "1" && origin.endsWith(".vercel.app"));
 
     if (isAllowed) {
       callback(null, true);
     } else {
-      callback(new Error(`Origin ${origin} is not allowed by CORS`));
+      callback(null, false); // Just fail CORS normally instead of throwing an error
     }
   },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -50,6 +50,9 @@ export const corsOptions = {
 
 export const createApp = () => {
   const app = express();
+
+  // Enable trust proxy for Vercel/proxies to correctly identify visitor IPs
+  app.set("trust proxy", 1);
 
   app.use(compression());
 
@@ -84,7 +87,7 @@ export const createApp = () => {
   });
 
   // Apply rate limiter specifically to API routes
-  app.use("/api/", limiter);
+  // app.use("/api/", limiter); // Temporarily disabled to check if causing 500 on Vercel environment
 
   app.use(cors(corsOptions));
   app.options("*", cors(corsOptions));
@@ -113,6 +116,15 @@ export const createApp = () => {
     } else {
       res.status(404).json({ error: "API route not found" });
     }
+  });
+
+  // Global Error Handler
+  app.use((err, req, res, next) => {
+    console.error("Express Error Handler:", err);
+    res.status(err.status || 500).json({
+      error: err.message || "Internal server error",
+      details: process.env.NODE_ENV === "development" ? err.stack : undefined
+    });
   });
 
   return app;
