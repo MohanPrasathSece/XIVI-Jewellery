@@ -45,12 +45,9 @@ const Sidebar = ({ onLogout, isOpen, onClose }: SidebarProps) => {
             )}>
                 <div className="p-6">
                     <div className="flex items-center justify-between mb-8">
-                        <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 bg-gradient-rose rounded-lg flex items-center justify-center text-white">
-                                <Sparkles className="w-5 h-5" />
-                            </div>
-                            <span className="text-2xl font-bold text-gradient-rose">XIVI</span>
-                        </div>
+                        <Link to="/admin-portal" className="flex items-center gap-2">
+                            <img src="/new_logo-removebg-preview.png" alt="XIVI Logo" className="h-8 w-auto object-contain" />
+                        </Link>
                         <Button variant="ghost" size="icon" className="md:hidden text-slate-500" onClick={onClose}>
                             <X className="w-5 h-5" />
                         </Button>

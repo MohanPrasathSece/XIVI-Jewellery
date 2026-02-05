@@ -38,9 +38,9 @@ const Navigation = () => {
                 navigate("/", { state: { scrollToHero: true } });
               }
             }}
-            className="font-cormorant text-xl md:text-2xl font-semibold text-gradient-rose focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md"
+            className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md"
           >
-            XIVI
+            <img src="/new_logo-removebg-preview.png" alt="XIVI Logo" className="h-4 md:h-5 w-auto object-contain" />
           </button>
         </div>
 
@@ -49,6 +49,12 @@ const Navigation = () => {
             <Link
               key={link.href}
               to={link.href}
+              onClick={(e) => {
+                if (isActive(link.href)) {
+                  e.preventDefault();
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }
+              }}
               className={cn(
                 "text-sm font-lato tracking-wide transition-colors hover:text-primary",
                 isActive(link.href) ? "text-primary font-medium" : "text-muted-foreground"
@@ -120,6 +126,13 @@ const Navigation = () => {
                 <Link
                   key={link.href}
                   to={link.href}
+                  onClick={(e) => {
+                    if (isActive(link.href)) {
+                      e.preventDefault();
+                      setIsMobileMenuOpen(false);
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }
+                  }}
                   className={cn(
                     "flex items-center justify-between rounded-xl px-3 py-4 transition-colors",
                     isActive(link.href)

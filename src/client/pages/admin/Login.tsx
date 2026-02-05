@@ -53,8 +53,8 @@ const AdminLogin = () => {
                     className="absolute inset-0 w-full h-full object-cover animate-pulse-slow"
                 />
                 <div className="relative z-20 text-center text-white p-12 max-w-lg">
-                    <div className="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-8 border border-white/20 shadow-2xl">
-                        <Sparkles className="w-8 h-8 text-white" />
+                    <div className="w-20 h-20 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-8 border border-white/20 shadow-2xl overflow-hidden">
+                        <img src="/new_logo-removebg-preview.png" alt="XIVI Logo" className="w-16 h-16 object-contain" />
                     </div>
                     <h2 className="text-4xl font-playfair font-bold mb-6 tracking-wide">XIVI Executive</h2>
                     <p className="text-lg text-white/80 leading-relaxed font-light border-t border-white/10 pt-6">
@@ -83,8 +83,8 @@ const AdminLogin = () => {
 
                 <div className="w-full max-w-md space-y-8">
                     <div className="text-center lg:text-left">
-                        <div className="inline-flex lg:hidden w-12 h-12 bg-gradient-rose rounded-xl items-center justify-center text-white mb-6 shadow-lg shadow-rose-200">
-                            <Sparkles className="w-6 h-6" />
+                        <div className="inline-flex lg:hidden w-16 h-16 bg-white/10 rounded-xl items-center justify-center mb-6 shadow-lg border border-rose-100 overflow-hidden">
+                            <img src="/new_logo-removebg-preview.png" alt="XIVI Logo" className="w-12 h-12 object-contain" />
                         </div>
                         <h1 className="text-3xl font-bold text-slate-900 mb-2 font-playfair">Admin Portal</h1>
                         <p className="text-slate-500">Secure access for management personnel.</p>

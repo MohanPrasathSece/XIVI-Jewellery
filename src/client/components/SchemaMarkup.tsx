@@ -8,7 +8,7 @@ const SchemaMarkup = () => {
         "@type": "Organization",
         "name": "XIVI",
         "url": siteUrl,
-        "logo": `${siteUrl}/favicon-diamond.svg`,
+        "logo": `${siteUrl}/new_logo-removebg-preview.png`,
         "description": "Exquisite Silver Jewellery & Accessories handcrafted for the modern individual.",
         "sameAs": [
             "https://www.instagram.com/xivi_silver",

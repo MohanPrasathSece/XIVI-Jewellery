@@ -7,9 +7,9 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="text-center md:text-left">
-            <h3 className="font-playfair text-2xl font-semibold text-gradient-rose mb-2">
-              XIVI
-            </h3>
+            <Link to="/">
+              <img src="/new_logo-removebg-preview.png" alt="XIVI Logo" className="h-6 w-auto mb-2 object-contain" />
+            </Link>
             <p className="text-sm text-muted-foreground">
               Elegance in Silver
             </p>
@@ -77,7 +77,7 @@ const Footer = () => {
             </Link>
           </div>
           <a
-            href="https://www.zyradigitals.info"
+            href="https://www.zyradigitals.com"
             target="_blank"
             rel="noopener noreferrer"
             className="text-xs font-medium text-primary hover:text-primary/80 transition-colors"
