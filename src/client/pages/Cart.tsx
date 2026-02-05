@@ -442,7 +442,7 @@ const Cart = () => {
 
                 <div className="rounded-xl border border-border/50 bg-background/80 p-4 text-xs text-muted-foreground">
                   <p className="font-medium text-foreground mb-1">Need styling help?</p>
-                  <p>Message our concierge team at +91 90254 21149 for curated looks and bespoke sizing advice.</p>
+                  <p>Message our concierge team at +91 97429 99547 for curated looks and bespoke sizing advice.</p>
                 </div>
               </aside>
             </div>

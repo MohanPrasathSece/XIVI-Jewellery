@@ -107,7 +107,7 @@ export const sendOrderEmails = async ({ order }) => {
   `;
 
   await Promise.all([
-    sendMail({ to: (process.env.OWNER_EMAIL || "mohanprasath563@gmail.com"), subject: "New XIVI Order", html: ownerHtml }),
+    sendMail({ to: (process.env.OWNER_EMAIL || "hello@xivi.in"), subject: "New XIVI Order", html: ownerHtml }),
     sendMail({ to: order.customer.email, subject: "Your XIVI order is confirmed", html: customerHtml }),
   ]);
 };

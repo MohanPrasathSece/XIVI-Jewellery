@@ -30,7 +30,7 @@ const Contact = () => {
     const message = encodeURIComponent(
       "Hi, I'd like to learn more about XIVI silver jewellery."
     );
-    window.open(`https://wa.me/919025421149?text=${message}`, "_blank");
+    window.open(`https://wa.me/919742999547?text=${message}`, "_blank");
   };
 
   return (
@@ -145,10 +145,10 @@ const Contact = () => {
                       Phone
                     </h3>
                     <a
-                      href="tel:+919025421149"
+                      href="tel:+919742999547"
                       className="text-muted-foreground hover:text-primary transition-colors"
                     >
-                      +91 90254 21149
+                      +91 97429 99547
                     </a>
                   </div>
                 </div>
@@ -162,10 +162,10 @@ const Contact = () => {
                       Email
                     </h3>
                     <a
-                      href="mailto:hello@xivi.com"
+                      href="mailto:hello@xivi.in"
                       className="text-muted-foreground hover:text-primary transition-colors"
                     >
-                      hello@xivi.com
+                      hello@xivi.in
                     </a>
                   </div>
                 </div>
