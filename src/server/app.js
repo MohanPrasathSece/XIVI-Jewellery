@@ -87,7 +87,7 @@ export const createApp = () => {
   });
 
   // Apply rate limiter specifically to API routes
-  // app.use("/api/", limiter); // Temporarily disabled to check if causing 500 on Vercel environment
+  app.use("/api/", limiter);
 
   app.use(cors(corsOptions));
   app.options("*", cors(corsOptions));
