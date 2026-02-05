@@ -1,5 +1,7 @@
 import express from "express";
 import cors from "cors";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -47,6 +49,23 @@ export const corsOptions = {
 
 export const createApp = () => {
   const app = express();
+
+  // Basic Security Headers
+  app.use(helmet({
+    contentSecurityPolicy: false, // Disable CSP if it interferes with Vite's dev server
+  }));
+
+  // Rate Limiting to prevent brute-force
+  const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per window
+    message: { error: "Too many requests from this IP, please try again after 15 minutes." },
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+
+  // Apply rate limiter specifically to API routes
+  app.use("/api/", limiter);
 
   app.use(cors(corsOptions));
   app.options("*", cors(corsOptions));

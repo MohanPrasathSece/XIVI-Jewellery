@@ -69,10 +69,14 @@ const OrderManagement = () => {
 
             if (error) throw error;
 
-            // Trigger email via backend
+            // Trigger email via backend with security token
+            const session = await supabase.auth.getSession();
             await fetch("/api/orders/update-status", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${session.data.session?.access_token}`
+                },
                 body: JSON.stringify({
                     orderId,
                     status: newStatus,
@@ -123,7 +127,13 @@ const OrderManagement = () => {
         if (!confirm("Are you sure you want to archive orders older than 30 days and send them to email? This will delete them from the database.")) return;
 
         try {
-            const res = await fetch("/api/orders/cleanup", { method: "POST" });
+            const session = await supabase.auth.getSession();
+            const res = await fetch("/api/orders/cleanup", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${session.data.session?.access_token}`
+                }
+            });
             const data = await res.json();
             if (data.error) throw new Error(data.error);
             toast({ title: "Maintenance Success", description: data.message });

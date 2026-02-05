@@ -64,7 +64,18 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-border/30 text-center">
+        <div className="mt-12 pt-6 border-t border-border/30 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-xs text-muted-foreground">
+            &copy; {new Date().getFullYear()} XIVI. All rights reserved.
+          </p>
+          <div className="flex gap-6">
+            <Link to="/terms-and-conditions" className="text-xs text-muted-foreground hover:text-primary transition-colors">
+              Terms & Conditions
+            </Link>
+            <Link to="/privacy-policy" className="text-xs text-muted-foreground hover:text-primary transition-colors">
+              Privacy Policy
+            </Link>
+          </div>
           <a
             href="https://www.zyradigitals.info"
             target="_blank"
