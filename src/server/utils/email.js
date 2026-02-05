@@ -167,3 +167,28 @@ export const sendStatusUpdateEmail = async ({ email, customerName, status, order
     html
   });
 };
+
+export const sendLowStockEmail = async ({ productName, productId, remainingStock }) => {
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px;">
+      <div style="background-color: #fff1f2; padding: 24px; text-align: center; border-bottom: 1px solid #e2e8f0;">
+        <h2 style="margin: 0; color: #be123c;">Low Stock Alert</h2>
+      </div>
+      <div style="padding: 24px;">
+        <p><strong>Item:</strong> ${productName}</p>
+        <p><strong>ID:</strong> ${productId}</p>
+        <p><strong>Remaining Quantity:</strong> <span style="font-size: 18px; font-weight: bold; color: #be123c;">${remainingStock}</span></p>
+        <p>Please restock this item soon to avoid running out of inventory.</p>
+        <div style="margin-top: 24px; text-align: center;">
+          <a href="#" style="background-color: #be123c; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;">Manage Inventory</a>
+        </div>
+      </div>
+    </div>
+  `;
+
+  await sendMail({
+    to: (process.env.OWNER_EMAIL || "admin@example.com"),
+    subject: `Running Low: ${productName}`,
+    html
+  });
+};

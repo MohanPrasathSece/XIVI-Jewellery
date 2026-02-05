@@ -89,9 +89,9 @@ const DashboardOverview = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div className="bg-white p-8 rounded-3xl shadow-soft border border-slate-100">
+                <div className="bg-white p-5 md:p-8 rounded-3xl shadow-soft border border-slate-100">
                     <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-xl font-bold text-slate-800">Recent Orders</h3>
+                        <h3 className="text-lg md:text-xl font-bold text-slate-800">Recent Orders</h3>
                         <button className="text-primary text-sm font-medium flex items-center gap-1 hover:underline">
                             View All <ArrowUpRight className="w-4 h-4" />
                         </button>
@@ -101,12 +101,12 @@ const DashboardOverview = () => {
                             recentOrders.map((order, i) => (
                                 <div key={i} className="flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 transition-colors">
                                     <div>
-                                        <p className="font-bold text-slate-700">{order.customer_name}</p>
+                                        <p className="font-bold text-slate-700 text-sm md:text-base">{order.customer_name}</p>
                                         <p className="text-[10px] text-slate-400">
                                             {new Date(order.created_at).toLocaleDateString("en-IN")} • {new Date(order.created_at).toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' })}
                                         </p>
                                     </div>
-                                    <p className="font-bold text-primary">₹{(order.total_price || 0).toLocaleString()}</p>
+                                    <p className="font-bold text-primary text-sm md:text-base">₹{(order.total_price || 0).toLocaleString()}</p>
                                 </div>
                             ))
                         ) : (
@@ -115,9 +115,9 @@ const DashboardOverview = () => {
                     </div>
                 </div>
 
-                <div className="bg-white p-8 rounded-3xl shadow-soft border border-slate-100">
+                <div className="bg-white p-5 md:p-8 rounded-3xl shadow-soft border border-slate-100">
                     <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-xl font-bold text-slate-800">New Products</h3>
+                        <h3 className="text-lg md:text-xl font-bold text-slate-800">New Products</h3>
                         <button className="text-primary text-sm font-medium flex items-center gap-1 hover:underline">
                             Add New <ArrowUpRight className="w-4 h-4" />
                         </button>
@@ -127,10 +127,10 @@ const DashboardOverview = () => {
                             recentProducts.map((prod, i) => (
                                 <div key={i} className="flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 transition-colors">
                                     <div>
-                                        <p className="font-bold text-slate-700">{prod.name}</p>
+                                        <p className="font-bold text-slate-700 text-sm md:text-base">{prod.name}</p>
                                         <p className="text-xs text-slate-400">{new Date(prod.created_at).toLocaleDateString()}</p>
                                     </div>
-                                    <p className="font-bold text-slate-600">₹{(prod.price || 0).toLocaleString()}</p>
+                                    <p className="font-bold text-slate-600 text-sm md:text-base">₹{(prod.price || 0).toLocaleString()}</p>
                                 </div>
                             ))
                         ) : (

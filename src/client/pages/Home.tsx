@@ -88,42 +88,42 @@ const Home = () => {
       {/* Hero Section */}
       <section
         id="hero"
-        className="relative min-h-screen md:h-screen flex items-center justify-center overflow-hidden pt-32 pb-16 md:pt-0 md:pb-0"
+        className="relative min-h-screen md:h-screen flex items-center justify-center overflow-hidden pt-32 pb-16 md:pt-0 md:pb-0 font-manrope"
       >
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${heroImage})` }}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-white/75 via-white/55 to-white/45" />
+          <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px]" />
         </div>
 
-        <div className="relative z-10 text-center px-4 animate-fade-in-slow">
-          <h1 className="font-cormorant text-3xl sm:text-4xl md:text-7xl font-bold mb-5 md:mb-6 text-foreground">
-            Radiance for the modern muse
+        <div className="relative z-10 text-center px-4 animate-fade-in-slow max-w-5xl">
+          <p className="text-sm md:text-base tracking-[0.2em] text-muted-foreground mb-5 uppercase font-medium">Premium Silver Jewelry</p>
+          <h1 className="font-cormorant text-4xl sm:text-6xl md:text-7xl font-bold mb-6 text-foreground tracking-tight leading-[1.1]">
+            Timeless
             <br />
-            <span className="text-gradient-rose">crafted to captivate</span>
+            <span className="text-gradient-rose">Elegance</span>
           </h1>
-          <p className="text-sm md:text-xl text-muted-foreground max-w-2xl mx-auto mb-6 md:mb-8">
-            Discover limited-edition silver adornments that balance sculptural lines with fluid femininity.
-            Each XIVI signature is designed to move with you, elevating every moment with effortless luxury.
+          <p className="text-sm md:text-lg text-muted-foreground/90 max-w-2xl mx-auto mb-8 font-normal leading-relaxed">
+            Discover our exquisite collection of pure 925 silver jewelry, where every piece tells a story of artistry and refinement.
           </p>
           <Button
             asChild
             variant="default"
             size="default"
-            className="bg-gradient-rose hover:shadow-glow transition-all duration-500 rounded-full px-8 md:px-10"
+            className="bg-gradient-rose hover:shadow-glow transition-all duration-500 rounded-full px-10 py-5 text-base border-none"
           >
             <Link to="/products">Explore Collection</Link>
           </Button>
         </div>
       </section>
 
-      {/* Featured Collection */}
+      {/* Featured Collection / OUR CRAFT */}
       <section id="collection" className="py-12 md:py-24 px-4 bg-gradient-champagne">
         <div className="container mx-auto">
           <div className="text-center mb-10 md:mb-16 animate-fade-in">
             <h2 className="font-cormorant text-2xl sm:text-3xl md:text-5xl font-semibold mb-3 md:mb-4">
-              Spotlight Collection
+              OUR CRAFT
             </h2>
             <div className="w-24 h-1 bg-gradient-rose mx-auto rounded-full" />
           </div>
@@ -149,6 +149,7 @@ const Home = () => {
                     <img
                       src={product.image}
                       alt={product.name}
+                      loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                   </div>
@@ -187,19 +188,18 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Brand Story */}
+      {/* Brand Story / OUR STORY */}
       <section className="py-12 md:py-24 px-4">
         <div className="container mx-auto max-w-4xl text-center animate-fade-in">
           <h2 className="font-cormorant text-2xl sm:text-4xl md:text-5xl font-semibold mb-5 md:mb-8">
-            Bespoke silver artistry, luminous allure
-            <br />
-            <span className="text-gradient-rose">designed for your signature style</span>
+            The Art of Silver
           </h2>
+          <div className="w-24 h-1 bg-gradient-rose mx-auto rounded-full mb-8" />
+          <p className="text-sm md:text-lg text-muted-foreground leading-relaxed mb-6">
+            XIVI began as a small dream, built on love and a deep appreciation for timeless 925 silver. Every piece is handcrafted in pure silver, shaped slowly and thoughtfully—because we believe beauty deserves time.
+          </p>
           <p className="text-sm md:text-lg text-muted-foreground leading-relaxed">
-            Each XIVI piece is dreamt up in our studio and brought to life by master artisans.
-            We blend responsibly sourced stones with satin-finished silver, creating heirloom-worthy
-            silver jewellery that feels unapologetically contemporary. From an intimate soirée to everyday
-            statements, these pieces evolve with the rhythm of your world.
+            Our artisans blend traditional craftsmanship with modern design, creating jewellery that feels personal, effortless, and lasting. At XIVI, we don't just create jewellery—we create pieces that become part of your story.
           </p>
         </div>
       </section>
@@ -208,26 +208,26 @@ const Home = () => {
       <section className="py-12 md:py-20 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            <div className="bg-card rounded-2xl p-5 md:p-8 shadow-soft hover:shadow-glow transition-smooth">
-              <div className="w-9 h-9 md:w-12 md:h-12 rounded-full bg-gradient-rose text-primary-foreground flex items-center justify-center mb-4 shadow-glow">
+            <div className="bg-card rounded-2xl p-5 md:p-8 shadow-soft hover:shadow-glow transition-smooth text-center">
+              <div className="w-9 h-9 md:w-12 md:h-12 rounded-full bg-gradient-rose text-primary-foreground flex items-center justify-center mb-4 shadow-glow mx-auto">
                 <Sparkles className="w-4 h-4 md:w-6 md:h-6" />
               </div>
-              <h3 className="font-cormorant text-lg md:text-2xl mb-2">Couture Craftsmanship</h3>
-              <p className="text-muted-foreground">Individually finished details echo the intimacy of atelier-made jewels for a polished, artful finish.</p>
+              <h3 className="font-cormorant text-lg md:text-2xl mb-2">925 Pure Silver</h3>
+              <p className="text-muted-foreground">Only the highest quality 925 sterling silver</p>
             </div>
-            <div className="bg-card rounded-2xl p-5 md:p-8 shadow-soft hover:shadow-glow transition-smooth">
-              <div className="w-9 h-9 md:w-12 md:h-12 rounded-full bg-gradient-rose text-primary-foreground flex items-center justify-center mb-4 shadow-glow">
+            <div className="bg-card rounded-2xl p-5 md:p-8 shadow-soft hover:shadow-glow transition-smooth text-center">
+              <div className="w-9 h-9 md:w-12 md:h-12 rounded-full bg-gradient-rose text-primary-foreground flex items-center justify-center mb-4 shadow-glow mx-auto">
                 <ShieldCheck className="w-4 h-4 md:w-6 md:h-6" />
               </div>
-              <h3 className="font-cormorant text-lg md:text-2xl mb-2">Elevated Materials</h3>
-              <p className="text-muted-foreground">Lustrous vermeil, lab-grown brilliance, and hypoallergenic bases deliver luxuriant wear every day.</p>
+              <h3 className="font-cormorant text-lg md:text-2xl mb-2">Handcrafted</h3>
+              <p className="text-muted-foreground">Each piece is made with artisan precision</p>
             </div>
-            <div className="bg-card rounded-2xl p-5 md:p-8 shadow-soft hover:shadow-glow transition-smooth">
-              <div className="w-9 h-9 md:w-12 md:h-12 rounded-full bg-gradient-rose text-primary-foreground flex items-center justify-center mb-4 shadow-glow">
+            <div className="bg-card rounded-2xl p-5 md:p-8 shadow-soft hover:shadow-glow transition-smooth text-center">
+              <div className="w-9 h-9 md:w-12 md:h-12 rounded-full bg-gradient-rose text-primary-foreground flex items-center justify-center mb-4 shadow-glow mx-auto">
                 <Leaf className="w-4 h-4 md:w-6 md:h-6" />
               </div>
-              <h3 className="font-cormorant text-lg md:text-2xl mb-2">Considered Luxury</h3>
-              <p className="text-muted-foreground">Sustainably sourced gemstones and refined packaging ensure beauty that honours people and planet.</p>
+              <h3 className="font-cormorant text-lg md:text-2xl mb-2">Timeless</h3>
+              <p className="text-muted-foreground">Designs that transcend fleeting trends</p>
             </div>
           </div>
         </div>

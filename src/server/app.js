@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import compression from "compression";
 import rateLimit from "express-rate-limit";
 import dotenv from "dotenv";
 import path from "path";
@@ -50,10 +51,28 @@ export const corsOptions = {
 export const createApp = () => {
   const app = express();
 
-  // Basic Security Headers
+  app.use(compression());
+
+  // Advanced Security Headers
   app.use(helmet({
-    contentSecurityPolicy: false, // Disable CSP if it interferes with Vite's dev server
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "https://checkout.razorpay.com", "https://*.supabase.co"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        imgSrc: ["'self'", "data:", "https://*.supabase.co", "https://checkout.razorpay.com"],
+        connectSrc: ["'self'", "https://*.supabase.co", "https://lapi.razorpay.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+        frameSrc: ["'self'", "https://api.razorpay.com", "https://*.razorpay.com"],
+        objectSrc: ["'none'"],
+        upgradeInsecureRequests: [],
+      },
+    },
+    crossOriginEmbedderPolicy: false,
   }));
+
+  // Hide server technology
+  app.disable("x-powered-by");
 
   // Rate Limiting to prevent brute-force
   const limiter = rateLimit({
@@ -75,7 +94,11 @@ export const createApp = () => {
 
   // Serve static files from the React app
   const distPath = path.resolve(__dirname, "../../dist");
-  app.use(express.static(distPath));
+  app.use(express.static(distPath, {
+    maxAge: "1d",
+    etag: true,
+    lastModified: true,
+  }));
 
   // For any other request, send back index.html (for SPA routing)
   app.get("*", (req, res) => {

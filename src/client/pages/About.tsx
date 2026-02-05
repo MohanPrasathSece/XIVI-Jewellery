@@ -32,22 +32,14 @@ const About = () => {
               <div className="w-24 h-1 bg-gradient-rose mx-auto rounded-full mb-8" />
             </div>
 
-            <p className="text-lg text-foreground/90 leading-relaxed">
-              XIVI was born from a passion for timeless beauty and exceptional silver craftsmanship.
-              We believe that every woman deserves silver jewellery that not only adorns but empowers—pieces
-              that become cherished companions through life's precious moments.
+            <h3 className="text-2xl font-playfair text-center mb-6">The Art of Silver</h3>
+
+            <p className="text-lg text-foreground/90 leading-relaxed text-center">
+              XIVI began as a small dream, built on love and a deep appreciation for timeless 925 silver. Every piece is handcrafted in pure silver, shaped slowly and thoughtfully—because we believe beauty deserves time.
             </p>
 
-            <p className="text-lg text-foreground/90 leading-relaxed">
-              Our collections are meticulously designed in Pune, where tradition meets contemporary
-              elegance. Each piece is handcrafted by skilled artisans who pour their expertise and
-              dedication into creating silver jewellery that transcends trends and celebrates individuality.
-            </p>
-
-            <p className="text-lg text-foreground/90 leading-relaxed">
-              We source only the finest materials—pure silver that catches the light with cool radiance,
-              ethically-sourced gemstones that sparkle with natural beauty, and sustainable practices
-              that honor both our craft and our planet.
+            <p className="text-lg text-foreground/90 leading-relaxed text-center">
+              Our artisans blend traditional craftsmanship with modern design, creating jewellery that feels personal, effortless, and lasting. At XIVI, we don't just create jewellery—we create pieces that become part of your story.
             </p>
           </div>
         </div>
@@ -67,34 +59,34 @@ const About = () => {
                 <span className="text-2xl">✨</span>
               </div>
               <h3 className="font-playfair text-xl font-semibold mb-3">
-                Timeless Design
+                925 Pure Silver
               </h3>
               <p className="text-muted-foreground">
-                Classic elegance that never goes out of style, designed to be treasured for generations.
+                Only the highest quality 925 sterling silver
               </p>
             </div>
 
             <div className="group text-center animate-fade-in rounded-2xl border border-transparent bg-white/60 backdrop-blur-sm px-6 py-10 transition-all duration-500 hover:-translate-y-2 hover:border-primary/30 hover:shadow-glow" style={{ animationDelay: "100ms" }}>
               <div className="w-16 h-16 bg-gradient-rose rounded-full mx-auto mb-6 flex items-center justify-center shadow-soft transition-transform duration-500 group-hover:scale-110">
-                <span className="text-2xl">🌿</span>
+                <span className="text-2xl">🔨</span>
               </div>
               <h3 className="font-playfair text-xl font-semibold mb-3">
-                Sustainability
+                Handcrafted
               </h3>
               <p className="text-muted-foreground">
-                Ethically sourced materials and responsible practices that honor our environment.
+                Each piece is made with artisan precision
               </p>
             </div>
 
             <div className="group text-center animate-fade-in rounded-2xl border border-transparent bg-white/60 backdrop-blur-sm px-6 py-10 transition-all duration-500 hover:-translate-y-2 hover:border-primary/30 hover:shadow-glow" style={{ animationDelay: "200ms" }}>
               <div className="w-16 h-16 bg-gradient-rose rounded-full mx-auto mb-6 flex items-center justify-center shadow-soft transition-transform duration-500 group-hover:scale-110">
-                <span className="text-2xl">💎</span>
+                <span className="text-2xl">⏳</span>
               </div>
               <h3 className="font-playfair text-xl font-semibold mb-3">
-                Craftsmanship
+                Timeless
               </h3>
               <p className="text-muted-foreground">
-                Handcrafted by skilled artisans with meticulous attention to every detail.
+                Designs that transcend fleeting trends
               </p>
             </div>
           </div>

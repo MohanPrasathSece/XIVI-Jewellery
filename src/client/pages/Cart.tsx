@@ -52,6 +52,7 @@ const Cart = () => {
   const [customer, setCustomer] = useState(createInitialCustomer());
   const [address, setAddress] = useState(createInitialAddress());
   const [notes, setNotes] = useState("");
+  const [isGift, setIsGift] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isRazorpayLoading, setIsRazorpayLoading] = useState(false);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
@@ -147,6 +148,7 @@ const Cart = () => {
           shippingAddress: address,
           items,
           notes,
+          isGift,
         }),
       });
 
@@ -194,6 +196,7 @@ const Cart = () => {
             setCustomer(createInitialCustomer());
             setAddress(createInitialAddress());
             setNotes("");
+            setIsGift(false);
             setIsConfirmationOpen(true);
           } catch (error) {
             const message = error instanceof Error ? error.message : "Unable to verify payment.";
@@ -415,6 +418,19 @@ const Cart = () => {
                     <div>
                       <Label htmlFor="order-notes">Notes (optional)</Label>
                       <Textarea id="order-notes" value={notes} onChange={handleNotesChange} disabled={!hasItems || isProcessing} />
+                    </div>
+                    <div className="flex items-center space-x-2 pt-2">
+                      <input
+                        type="checkbox"
+                        id="gift-option"
+                        checked={isGift}
+                        onChange={(e) => setIsGift(e.target.checked)}
+                        className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                        disabled={!hasItems || isProcessing}
+                      />
+                      <Label htmlFor="gift-option" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                        Gift this order (Complimentary wrapping included)
+                      </Label>
                     </div>
                   </div>
                 </div>

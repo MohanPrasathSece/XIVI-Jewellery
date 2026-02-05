@@ -34,9 +34,9 @@ const Contact = () => {
   };
 
   return (
-    <main className="min-h-screen pt-16 md:pt-20">
+    <main className="min-h-screen pt-14 md:pt-16">
       {/* Header */}
-      <section className="py-16 px-4 bg-gradient-champagne">
+      <section className="py-8 md:py-12 px-4 bg-gradient-champagne">
         <div className="container mx-auto max-w-4xl text-center animate-fade-in">
           <h1 className="font-playfair text-5xl md:text-6xl font-bold mb-6">
             Get in <span className="text-gradient-rose">Touch</span>
@@ -179,7 +179,7 @@ const Contact = () => {
                       Location
                     </h3>
                     <p className="text-muted-foreground">
-                      Pune, Maharashtra
+                      Bangalore
                       <br />
                       India
                     </p>

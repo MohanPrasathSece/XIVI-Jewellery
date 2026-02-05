@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Edit2, Trash2, ImagePlus, Eye, EyeOff, Package, PackageX } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface Product {
     id: string;
@@ -21,6 +22,7 @@ interface Product {
     price: number;
     category_id: string;
     stock_status: boolean;
+    stock_quantity?: number;
     visibility: boolean;
     images: string[];
 }
@@ -39,6 +41,7 @@ const ProductManagement = () => {
         price: 0,
         category_id: "",
         stock_status: true,
+        stock_quantity: 0,
         visibility: true,
         images: [] as string[],
     });
@@ -78,7 +81,7 @@ const ProductManagement = () => {
         e.preventDefault();
         setLoading(true);
 
-        const payload = {
+        const payload: any = {
             name: formData.name,
             description: formData.description,
             price: formData.price,
@@ -87,6 +90,11 @@ const ProductManagement = () => {
             visibility: formData.visibility,
             images: formData.images,
         };
+
+        // Only include stock_quantity if it's non-zero or we want to track it
+        if (formData.stock_quantity !== undefined) {
+            payload.stock_quantity = formData.stock_quantity;
+        }
 
         try {
             if (formData.id) {
@@ -129,13 +137,17 @@ const ProductManagement = () => {
             price: 0,
             category_id: "",
             stock_status: true,
+            stock_quantity: 0,
             visibility: true,
             images: [],
         });
     };
 
     const openEdit = (product: Product) => {
-        setFormData(product);
+        setFormData({
+            ...product,
+            stock_quantity: product.stock_quantity ?? 0
+        });
         setIsDialogOpen(true);
     };
 
@@ -170,23 +182,23 @@ const ProductManagement = () => {
 
     return (
         <div className="space-y-6">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <h2 className="text-2xl font-bold text-slate-800">Inventory Management</h2>
                 <Dialog open={isDialogOpen} onOpenChange={(open) => {
                     setIsDialogOpen(open);
                     if (!open) resetForm();
                 }}>
                     <DialogTrigger asChild>
-                        <Button className="rounded-full bg-gradient-rose text-white gap-2 shadow-glow">
+                        <Button className="rounded-full bg-gradient-rose text-white gap-2 shadow-glow w-full md:w-auto">
                             <Plus className="w-4 h-4" /> Add Silver Piece
                         </Button>
                     </DialogTrigger>
-                    <DialogContent className="max-w-2xl bg-white rounded-3xl p-8">
+                    <DialogContent className="max-w-2xl w-[95%] md:w-full bg-white rounded-3xl p-6 md:p-8 max-h-[90vh] overflow-y-auto">
                         <DialogHeader>
                             <DialogTitle className="text-2xl">{formData.id ? "Edit Silver Piece" : "New Silver Creation"}</DialogTitle>
                         </DialogHeader>
                         <form onSubmit={handleSave} className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <Label>Product Name</Label>
                                     <Input value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required className="rounded-xl border-slate-200" />
@@ -209,12 +221,16 @@ const ProductManagement = () => {
                                 <Label>Description</Label>
                                 <Textarea value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} required className="rounded-xl border-slate-200" />
                             </div>
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div className="space-y-2">
                                     <Label>Price (₹)</Label>
                                     <Input type="number" value={formData.price} onChange={e => setFormData({ ...formData, price: Number(e.target.value) })} required className="rounded-xl border-slate-200" />
                                 </div>
-                                <div className="flex gap-4 items-end pb-1">
+                                <div className="space-y-2">
+                                    <Label>Stock Quantity</Label>
+                                    <Input type="number" value={formData.stock_quantity ?? 0} onChange={e => setFormData({ ...formData, stock_quantity: Number(e.target.value) })} className="rounded-xl border-slate-200" />
+                                </div>
+                                <div className="flex gap-4 items-end pb-1 pt-2 md:pt-0">
                                     <div className="flex items-center gap-2 cursor-pointer" onClick={() => setFormData({ ...formData, stock_status: !formData.stock_status })}>
                                         {formData.stock_status ? <Package className="w-5 h-5 text-green-500" /> : <PackageX className="w-5 h-5 text-red-500" />}
                                         <span className="text-sm font-medium">{formData.stock_status ? "In Stock" : "Out of Stock"}</span>
@@ -257,24 +273,38 @@ const ProductManagement = () => {
                 {products.map(product => {
                     const cat = categories.find(c => c.id === product.category_id);
                     return (
-                        <div key={product.id} className="bg-white rounded-3xl p-4 shadow-soft border border-slate-100 flex gap-4 group transition-all hover:shadow-glow">
-                            <div className="w-24 h-24 rounded-2xl overflow-hidden shadow-sm shrink-0">
-                                <img src={product.images[0] || "/placeholder.jpg"} className="w-full h-full object-cover" />
+                        <div key={product.id} className="bg-white rounded-3xl p-4 shadow-soft border border-slate-100 flex flex-col sm:flex-row gap-4 group transition-all hover:shadow-glow">
+                            <div className="w-full sm:w-24 h-40 sm:h-24 rounded-2xl overflow-hidden shadow-sm shrink-0">
+                                <img
+                                    src={(Array.isArray(product.images) && product.images.length > 0) ? product.images[0] : "/placeholder.jpg"}
+                                    className="w-full h-full object-cover"
+                                    alt={product.name}
+                                />
                             </div>
                             <div className="flex-1 min-w-0">
                                 <div className="flex justify-between">
                                     <span className="text-xs font-bold text-primary uppercase tracking-wider">{cat?.name || "Uncategorized"}</span>
-                                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div className="flex gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
                                         <button onClick={() => openEdit(product)} className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-600"><Edit2 className="w-4 h-4" /></button>
                                         <button onClick={() => handleDelete(product.id)} className="p-1.5 hover:bg-red-50 rounded-lg text-red-600"><Trash2 className="w-4 h-4" /></button>
                                     </div>
                                 </div>
                                 <h3 className="font-bold text-slate-800 truncate pr-8">{product.name}</h3>
                                 <p className="text-lg font-bold text-slate-900 mt-1">₹{product.price.toLocaleString()}</p>
-                                <div className="flex gap-2 mt-2">
+                                <div className="flex flex-wrap gap-2 mt-2">
                                     <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ${product.stock_status ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                                         {product.stock_status ? "In Stock" : "Out of Stock"}
                                     </span>
+                                    {product.stock_quantity !== undefined && (
+                                        <span className={cn(
+                                            "text-[10px] px-2 py-0.5 rounded-full font-bold uppercase border",
+                                            product.stock_quantity < 5 && product.stock_status
+                                                ? "bg-amber-100 text-amber-700 border-amber-200"
+                                                : "bg-slate-100 text-slate-800 border-slate-200"
+                                        )}>
+                                            {product.stock_quantity < 5 && product.stock_status && "Low Stock: "}{product.stock_quantity}
+                                        </span>
+                                    )}
                                     {!product.visibility && (
                                         <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-slate-100 text-slate-600">Hidden</span>
                                     )}
@@ -284,7 +314,7 @@ const ProductManagement = () => {
                     );
                 })}
             </div>
-        </div>
+        </div >
     );
 };
 

@@ -7,6 +7,34 @@ All colors MUST be HSL.
 */
 
 @layer base {
+
+  html {
+    overflow-y: scroll !important;
+    scrollbar-gutter: stable !important;
+  }
+
+  /* Prevent move left/right (Radix Scroll Lock Conflict) without breaking design */
+  body,
+  header {
+    padding-right: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Prevent Radix from adding unwanted padding to the body when scroll is locked */
+  [data-scroll-locked] {
+    padding-right: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  body {
+    min-height: 100vh;
+    overflow-x: hidden !important;
+  }
+
+  body[data-scroll-locked] {
+    overflow: hidden !important;
+  }
+
   :root {
     /* XIVI Premium Design System */
     --background: 30 40% 97%;
@@ -114,5 +142,14 @@ All colors MUST be HSL.
 
   .hover-lift {
     @apply transition-transform duration-300 hover:-translate-y-1;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }
