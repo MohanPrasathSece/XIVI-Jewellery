@@ -1,11 +1,9 @@
 import { createApp } from "../src/server/app.js";
-import { connectToDatabase } from "../src/server/db.js";
 
 let serverlessApp;
 
 const getApp = async () => {
   if (!serverlessApp) {
-    await connectToDatabase();
     serverlessApp = createApp();
   }
   return serverlessApp;
