@@ -177,7 +177,7 @@ export const verifyPayment = async (req, res) => {
 
 export const updateOrderStatus = async (req, res) => {
   try {
-    const { orderId, status, trackingNumber } = req.body;
+    const { orderId, status, trackingNumber, trackingId } = req.body;
 
     if (!supabase) {
       return res.status(503).json({ error: "Supabase service is not available. Please check environment variables." });
@@ -202,7 +202,8 @@ export const updateOrderStatus = async (req, res) => {
         customerName: order.customer_name,
         status,
         orderId: order.id.slice(0, 8),
-        trackingNumber: trackingNumber || order.tracking_number
+        trackingNumber: trackingNumber || order.tracking_number,
+        trackingId: trackingId || order.tracking_id
       }).catch(e => console.error("Background Status Email Failed:", e));
     } catch (emailErr) {
       console.error("Failed to send status email", emailErr);

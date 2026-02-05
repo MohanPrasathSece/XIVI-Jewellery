@@ -102,7 +102,9 @@ const DashboardOverview = () => {
                                 <div key={i} className="flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 transition-colors">
                                     <div>
                                         <p className="font-bold text-slate-700">{order.customer_name}</p>
-                                        <p className="text-xs text-slate-400">{new Date(order.created_at).toLocaleDateString()}</p>
+                                        <p className="text-[10px] text-slate-400">
+                                            {new Date(order.created_at).toLocaleDateString("en-IN")} • {new Date(order.created_at).toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' })}
+                                        </p>
                                     </div>
                                     <p className="font-bold text-primary">₹{(order.total_price || 0).toLocaleString()}</p>
                                 </div>

@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 
 import { createApp } from "./app.js";
+import { initMaintenanceScheduler } from "./utils/maintenance.js";
 
 dotenv.config();
 
@@ -9,6 +10,7 @@ const port = process.env.PORT || 4000;
 const start = async () => {
   try {
     const app = createApp();
+    initMaintenanceScheduler();
 
     app.listen(port, () => {
       console.log(`Server listening on port ${port}`);

@@ -120,15 +120,26 @@ export const sendOrderEmails = async ({ order }) => {
   ]);
 };
 
-export const sendStatusUpdateEmail = async ({ email, customerName, status, orderId, trackingNumber }) => {
+export const sendStatusUpdateEmail = async ({ email, customerName, status, orderId, trackingNumber, trackingId }) => {
   const statusMessages = {
     Confirmed: "Great news! Your silver order has been confirmed and is now being prepared by our master artisans.",
-    Shipped: `Your silver adornments are on their way! ${trackingNumber ? `Tracking Number: <strong>${trackingNumber}</strong>` : "They've officially left our atelier."}`,
+    Shipped: `Your silver adornments are on their way! They've officially left our atelier.`,
     Delivered: "The wait is over! Your XIVI pieces have been delivered. We hope they bring radiance to your day.",
     Cancelled: "Your order has been cancelled as requested or due to processing issues. If this was a mistake, please reach out.",
   };
 
   const message = statusMessages[status] || `Your order status has been updated to ${status}.`;
+
+  let trackingBlock = "";
+  if (status === 'Shipped' && (trackingId || trackingNumber)) {
+    trackingBlock = `
+      <div style="margin-top: 20px; padding: 15px; background-color: #f0fdf4; border-left: 4px solid #10b981; border-radius: 4px;">
+        <h4 style="margin: 0 0 10px 0; color: #065f46;">Tracking Information</h4>
+        ${trackingId ? `<p style="margin: 5px 0;"><strong>Tracking ID:</strong> ${trackingId}</p>` : ""}
+        ${trackingNumber ? `<p style="margin: 5px 0;"><a href="${trackingNumber}" style="color: #059669; font-weight: bold; text-decoration: underline;">Track your package here &rarr;</a></p>` : ""}
+      </div>
+    `;
+  }
 
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #f0f0f0; border-radius: 12px; overflow: hidden;">
@@ -139,6 +150,7 @@ export const sendStatusUpdateEmail = async ({ email, customerName, status, order
         <h2 style="color: #8a1f3e;">Order Update: ${status}</h2>
         <p>Dear ${customerName},</p>
         <p>${message}</p>
+        ${trackingBlock}
         <div style="background: #fdf2f7; padding: 16px; border-radius: 8px; margin: 24px 0;">
           <p style="margin: 0; font-size: 14px; color: #7a1e3a;"><strong>Order ID:</strong> #${orderId}</p>
           <p style="margin: 4px 0 0; font-size: 14px; color: #7a1e3a;"><strong>Status:</strong> ${status}</p>
