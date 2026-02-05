@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import Order from "../models/Order.js";
+// MongoDB import removed - migrating to Supabase
 import { getRazorpayClient } from "../lib/razorpay.js";
 import { sendOrderEmails, sendStatusUpdateEmail } from "../utils/email.js";
 import { supabase } from "../lib/supabase.js";
@@ -56,17 +56,31 @@ export const createOrder = async (req, res) => {
       },
     });
 
-    const order = await Order.create({
-      razorpayOrderId: razorpayOrder.id,
-      amount,
-      amountInPaise,
+    if (!supabase) {
+      return res.status(500).json({ error: "Supabase is not configured." });
+    }
+
+    const { data: supaOrder, error: supaError } = await supabase.from("orders").insert([{
+      razorpay_order_id: razorpayOrder.id,
+      total_price: amount,
       currency: razorpayOrder.currency,
       status: "pending",
-      customer,
-      shippingAddress,
-      items,
-      notes,
-    });
+      customer_name: customer.name,
+      email: customer.email,
+      phone: customer.phone,
+      address: `${shippingAddress.line1}, ${shippingAddress.line2 || ""}, ${shippingAddress.city}, ${shippingAddress.state} ${shippingAddress.postalCode}, ${shippingAddress.country}`,
+      products: JSON.stringify(items),
+      notes: notes || ""
+    }]).select().single();
+
+    if (supaError) {
+      console.error("Supabase order creation failed:", supaError);
+      return res.status(500).json({
+        error: "Database error",
+        details: supaError.message,
+        hint: "Make sure you have run the ALTER TABLE SQL commands in Supabase Editor."
+      });
+    }
 
     return res.json({
       success: true,
@@ -76,12 +90,12 @@ export const createOrder = async (req, res) => {
       currency: razorpayOrder.currency,
       razorpayKey: razorpayClient.key_id,
       order: {
-        id: order._id,
-        status: order.status,
+        id: supaOrder.id,
+        status: supaOrder.status,
       },
     });
   } catch (error) {
-    console.error("Failed to create order", error);
+    console.error("Failed to create order:", error);
     return res.status(400).json({ error: error.message || "Unable to create order" });
   }
 };
@@ -94,9 +108,17 @@ export const verifyPayment = async (req, res) => {
       return res.status(400).json({ error: "Payment verification data is incomplete." });
     }
 
-    const order = await Order.findOne({ razorpayOrderId });
+    if (!supabase) {
+      return res.status(500).json({ error: "Supabase status: unavailable" });
+    }
 
-    if (!order) {
+    const { data: order, error: fetchError } = await supabase
+      .from("orders")
+      .select("*")
+      .eq("razorpay_order_id", razorpayOrderId)
+      .single();
+
+    if (fetchError || !order) {
       return res.status(404).json({ error: "Order not found." });
     }
 
@@ -108,39 +130,42 @@ export const verifyPayment = async (req, res) => {
     const isValid = expectedSignature === razorpaySignature;
 
     if (!isValid) {
-      order.status = "failed";
-      await order.save();
+      await supabase.from("orders").update({ status: "failed" }).eq("id", order.id);
       return res.status(400).json({ error: "Invalid payment signature." });
     }
 
-    order.status = "paid";
-    order.razorpayPaymentId = razorpayPaymentId;
-    order.razorpaySignature = razorpaySignature;
-    order.paidAt = new Date();
-    await order.save();
+    // Success
+    const { error: updateError } = await supabase
+      .from("orders")
+      .update({
+        status: "Confirmed",
+        razorpay_payment_id: razorpayPaymentId,
+        razorpay_signature: razorpaySignature,
+        paid_at: new Date().toISOString()
+      })
+      .eq("id", order.id);
+
+    if (updateError) throw updateError;
 
     try {
-      await sendOrderEmails({ order });
+      // Fetch updated order for email
+      const { data: updatedOrder } = await supabase.from("orders").select("*").eq("id", order.id).single();
 
-      // Also save to Supabase for Admin Panel
-      const addressString = `${order.shippingAddress.line1}, ${order.shippingAddress.line2 || ""}, ${order.shippingAddress.city}, ${order.shippingAddress.state} ${order.shippingAddress.postalCode}, ${order.shippingAddress.country}`;
-
-      if (supabase) {
-        await supabase.from("orders").insert([{
-          customer_name: order.customer.name,
-          email: order.customer.email,
-          phone: order.customer.phone,
-          address: addressString,
-          products: JSON.stringify(order.items),
-          total_price: order.amount,
-          status: "Confirmed",
-          tracking_number: "",
-          notes: order.notes || ""
-        }]);
-      }
+      // Map Supabase order back to expected format for email utils if necessary
+      // For now, let's keep it simple or adjust sendOrderEmails
+      // Background email sending to make checkout "very very fast"
+      sendOrderEmails({
+        order: {
+          ...updatedOrder,
+          customer: { name: updatedOrder.customer_name, email: updatedOrder.email, phone: updatedOrder.phone },
+          items: JSON.parse(updatedOrder.products),
+          amount: updatedOrder.total_price,
+          razorpayOrderId: updatedOrder.razorpay_order_id
+        }
+      }).catch(e => console.error("Background Order Email Failed:", e));
 
     } catch (saveError) {
-      console.error("Failed to post-process order", saveError);
+      console.error("Failed to send post-payment emails", saveError);
     }
 
     return res.json({ success: true, message: "Payment verified", orderId: order.razorpayOrderId });
@@ -152,7 +177,7 @@ export const verifyPayment = async (req, res) => {
 
 export const updateOrderStatus = async (req, res) => {
   try {
-    const { orderId, status } = req.body;
+    const { orderId, status, trackingNumber } = req.body;
 
     if (!supabase) {
       return res.status(503).json({ error: "Supabase service is not available. Please check environment variables." });
@@ -171,13 +196,14 @@ export const updateOrderStatus = async (req, res) => {
 
     // Send email via existing email util
     try {
-      await sendStatusUpdateEmail({
+      // Background email sending
+      sendStatusUpdateEmail({
         email: order.email,
         customerName: order.customer_name,
         status,
         orderId: order.id.slice(0, 8),
-        trackingNumber: order.tracking_number
-      });
+        trackingNumber: trackingNumber || order.tracking_number
+      }).catch(e => console.error("Background Status Email Failed:", e));
     } catch (emailErr) {
       console.error("Failed to send status email", emailErr);
     }

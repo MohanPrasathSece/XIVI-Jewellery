@@ -24,6 +24,9 @@ export const getTransporter = () => {
       user: SMTP_USER,
       pass: SMTP_PASS,
     },
+    tls: {
+      rejectUnauthorized: false
+    }
   });
 
   return transporter;
@@ -70,12 +73,17 @@ export const sendOrderEmails = async ({ order }) => {
     </table>
   `;
 
-  const addressBlock = `
-    <p style="margin:0;">${order.shippingAddress.line1}</p>
-    ${order.shippingAddress.line2 ? `<p style="margin:0;">${order.shippingAddress.line2}</p>` : ""}
-    <p style="margin:0;">${order.shippingAddress.city}, ${order.shippingAddress.state} ${order.shippingAddress.postalCode}</p>
-    <p style="margin:0;">${order.shippingAddress.country}</p>
-  `;
+  let addressBlock = "";
+  if (order.shippingAddress && typeof order.shippingAddress === 'object') {
+    addressBlock = `
+      <p style="margin:0;">${order.shippingAddress.line1 || ""}</p>
+      ${order.shippingAddress.line2 ? `<p style="margin:0;">${order.shippingAddress.line2}</p>` : ""}
+      <p style="margin:0;">${order.shippingAddress.city || ""}, ${order.shippingAddress.state || ""} ${order.shippingAddress.postalCode || ""}</p>
+      <p style="margin:0;">${order.shippingAddress.country || ""}</p>
+    `;
+  } else if (order.address) {
+    addressBlock = `<p style="margin:0;">${order.address}</p>`;
+  }
 
   const ownerHtml = `
     <h2 style="font-family: 'Playfair Display', serif; color:#9b2241;">New XIVI order</h2>

@@ -2,9 +2,9 @@ import aboutBanner from "@/assets/about-banner.jpg";
 
 const About = () => {
   return (
-    <main className="min-h-screen pt-16 md:pt-20">
+    <main className="min-h-screen">
       {/* Banner Section */}
-      <section className="relative h-96 overflow-hidden">
+      <section className="relative h-[80vh] overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${aboutBanner})` }}

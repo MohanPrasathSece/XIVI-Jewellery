@@ -16,7 +16,7 @@ const AdminDashboard = () => {
     };
 
     return (
-        <div className="flex min-h-screen bg-slate-50">
+        <div className="flex min-h-screen bg-slate-50 font-manrope admin-portal">
             <Sidebar onLogout={handleLogout} />
             <div className="flex-1 p-8">
                 <header className="mb-8 flex items-center justify-between">

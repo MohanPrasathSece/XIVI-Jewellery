@@ -5,7 +5,8 @@ import {
     ClipboardList,
     AlertTriangle,
     ArrowUpRight,
-    TrendingUp
+    TrendingUp,
+    Calendar
 } from "lucide-react";
 
 const DashboardOverview = () => {
@@ -15,6 +16,8 @@ const DashboardOverview = () => {
         lowStock: 0,
         revenue: 0
     });
+    const [recentOrders, setRecentOrders] = useState<any[]>([]);
+    const [recentProducts, setRecentProducts] = useState<any[]>([]);
 
     useEffect(() => {
         const fetchStats = async () => {
@@ -23,20 +26,40 @@ const DashboardOverview = () => {
                 .from('products')
                 .select('*', { count: 'exact', head: true });
 
-            // Orders count
-            const { count: ordersCount } = await supabase
+            // Orders count & Revenue
+            const { data: ordersData } = await supabase
                 .from('orders')
-                .select('*', { count: 'exact', head: true });
+                .select('total_price, status, created_at, customer_name');
 
-            // Low stock (e.g., if we had a stock field, but user asked for stock_status toggles)
-            // For now, let's just use some placeholder logic or actual counts if possible
+            const totalOrders = ordersData?.length || 0;
+            const revenue = ordersData?.reduce((acc, order) => acc + (order.total_price || 0), 0) || 0;
+
+            // Low stock
+            const { count: lowStockCount } = await supabase
+                .from('products')
+                .select('*', { count: 'exact', head: true })
+                .eq('stock_status', false);
 
             setStats({
                 products: productsCount || 0,
-                orders: ordersCount || 0,
-                lowStock: 2, // Placeholder for demonstration
-                revenue: 125000 // Placeholder
+                orders: totalOrders,
+                lowStock: lowStockCount || 0,
+                revenue: revenue
             });
+
+            if (ordersData) {
+                setRecentOrders(ordersData.slice(0, 5));
+            }
+
+            const { data: recentProds } = await supabase
+                .from('products')
+                .select('name, price, created_at')
+                .order('created_at', { ascending: false })
+                .limit(5);
+
+            if (recentProds) {
+                setRecentProducts(recentProds);
+            }
         };
 
         fetchStats();
@@ -74,8 +97,19 @@ const DashboardOverview = () => {
                         </button>
                     </div>
                     <div className="space-y-4">
-                        {/* Placeholder for recent orders */}
-                        <p className="text-slate-500 text-sm">No recent orders to show yet.</p>
+                        {recentOrders.length > 0 ? (
+                            recentOrders.map((order, i) => (
+                                <div key={i} className="flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 transition-colors">
+                                    <div>
+                                        <p className="font-bold text-slate-700">{order.customer_name}</p>
+                                        <p className="text-xs text-slate-400">{new Date(order.created_at).toLocaleDateString()}</p>
+                                    </div>
+                                    <p className="font-bold text-primary">₹{(order.total_price || 0).toLocaleString()}</p>
+                                </div>
+                            ))
+                        ) : (
+                            <p className="text-slate-500 text-sm">No recent orders to show yet.</p>
+                        )}
                     </div>
                 </div>
 
@@ -87,8 +121,19 @@ const DashboardOverview = () => {
                         </button>
                     </div>
                     <div className="space-y-4">
-                        {/* Placeholder for recent products */}
-                        <p className="text-slate-500 text-sm">Welcome to XIVI. Get started by adding your first silver masterpiece!</p>
+                        {recentProducts.length > 0 ? (
+                            recentProducts.map((prod, i) => (
+                                <div key={i} className="flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 transition-colors">
+                                    <div>
+                                        <p className="font-bold text-slate-700">{prod.name}</p>
+                                        <p className="text-xs text-slate-400">{new Date(prod.created_at).toLocaleDateString()}</p>
+                                    </div>
+                                    <p className="font-bold text-slate-600">₹{(prod.price || 0).toLocaleString()}</p>
+                                </div>
+                            ))
+                        ) : (
+                            <p className="text-slate-500 text-sm">No recent products found.</p>
+                        )}
                     </div>
                 </div>
             </div>

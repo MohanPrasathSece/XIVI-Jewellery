@@ -12,6 +12,7 @@ import {
     Clock,
     ExternalLink
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import {
     Dialog,
     DialogContent,
@@ -58,7 +59,11 @@ const OrderManagement = () => {
             await fetch("/api/orders/update-status", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ orderId, status: newStatus })
+                body: JSON.stringify({
+                    orderId,
+                    status: newStatus,
+                    trackingNumber: selectedOrder?.tracking_number || ""
+                })
             });
 
             toast({ title: `Order ${newStatus}` });
@@ -73,7 +78,7 @@ const OrderManagement = () => {
         Pending: <Clock className="w-4 h-4 text-amber-500" />,
         Confirmed: <CheckCircle2 className="w-4 h-4 text-blue-500" />,
         Shipped: <Truck className="w-4 h-4 text-purple-500" />,
-        Delivered: <CheckCircle2 className="w-4 h-4 text-green-500" />,
+        Delivered: <CheckCircle2 className="w-4 h-4 text-emerald-500" />,
         Cancelled: <XCircle className="w-4 h-4 text-red-500" />,
     };
 
@@ -156,16 +161,21 @@ const OrderManagement = () => {
                                         </div>
                                     </div>
                                     <div>
-                                        <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 text-right">Tracking</h4>
+                                        <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 text-right">Shipping / Tracking Link</h4>
                                         <Input
-                                            placeholder="Add tracking number..."
-                                            defaultValue={selectedOrder.tracking_number}
+                                            placeholder="https://tracking.link/..."
+                                            value={selectedOrder.tracking_number}
+                                            onChange={async (e) => {
+                                                const val = e.target.value;
+                                                setSelectedOrder({ ...selectedOrder, tracking_number: val });
+                                            }}
                                             onBlur={async (e) => {
                                                 await supabase.from("orders").update({ tracking_number: e.target.value }).eq("id", selectedOrder.id);
-                                                toast({ title: "Tracking updated" });
+                                                toast({ title: "Tracking Saved" });
                                             }}
-                                            className="text-right h-8 rounded-lg"
+                                            className="text-right h-9 rounded-xl border-slate-200 focus:ring-emerald-500"
                                         />
+                                        <p className="text-[10px] text-slate-400 mt-1">Updates the tracking info sent in emails.</p>
                                     </div>
                                 </div>
                             </div>
@@ -178,7 +188,14 @@ const OrderManagement = () => {
                                             variant="outline"
                                             size="sm"
                                             onClick={() => updateStatus(selectedOrder.id, status)}
-                                            className={selectedOrder.status === status ? "bg-slate-100 border-slate-300" : ""}
+                                            className={cn(
+                                                "transition-all",
+                                                selectedOrder.status === status
+                                                    ? status === 'Delivered'
+                                                        ? "bg-emerald-50 border-emerald-200 text-emerald-700 font-bold"
+                                                        : "bg-slate-100 border-slate-300 font-bold"
+                                                    : "hover:bg-slate-50"
+                                            )}
                                         >
                                             {status}
                                         </Button>

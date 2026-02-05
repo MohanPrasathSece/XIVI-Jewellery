@@ -79,8 +79,8 @@ const Products = () => {
     return () => { supabase.removeChannel(channel); };
   }, []);
 
-  const products = dbProducts;
-  const categories = dbCategories.length > 0 ? dbCategories : ["All"];
+  const products = dbProducts.length > 0 ? dbProducts : MOCK_PRODUCTS;
+  const categories = dbCategories.length > 0 ? dbCategories : ["All", "Earrings", "Necklaces", "Bracelets", "Rings", "Anklets", "Jewelry Sets"];
 
   const queryCategory = useMemo(() => {
     const params = new URLSearchParams(location.search);

@@ -42,7 +42,7 @@ const AdminLogin = () => {
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gradient-champagne px-4">
+        <div className="flex min-h-screen items-center justify-center bg-gradient-champagne px-4 font-manrope admin-portal">
             <div className="w-full max-w-md rounded-3xl bg-card p-8 shadow-glow transition-all animate-fade-in">
                 <div className="text-center mb-8">
                     <h1 className="text-4xl font-bold text-gradient-rose">XIVI Portal</h1>

@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 
 import { createApp } from "./app.js";
-import { connectToDatabase } from "./db.js";
 
 dotenv.config();
 
@@ -9,7 +8,6 @@ const port = process.env.PORT || 4000;
 
 const start = async () => {
   try {
-    await connectToDatabase();
     const app = createApp();
 
     app.listen(port, () => {

@@ -93,7 +93,12 @@ All colors MUST be HSL.
     @apply bg-background text-foreground font-manrope antialiased;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1:not(.admin-portal *),
+  h2:not(.admin-portal *),
+  h3:not(.admin-portal *),
+  h4:not(.admin-portal *),
+  h5:not(.admin-portal *),
+  h6:not(.admin-portal *) {
     @apply font-cormorant;
   }
 }
@@ -111,4 +116,3 @@ All colors MUST be HSL.
     @apply transition-transform duration-300 hover:-translate-y-1;
   }
 }
-
