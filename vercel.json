@@ -6,7 +6,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://<your-backend-domain>/api/$1"
+      "destination": "/api/orders.js"
     },
     {
       "source": "/(.*)",

@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* XIVI Premium Design System */
+    --background: 30 40% 97%;
+    --foreground: 30 25% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 30 25% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 30 25% 15%;
+
+    /* Rose gold primary */
+    --primary: 351 45% 45%;
+    --primary-foreground: 30 100% 99%;
+    --primary-glow: 351 60% 70%;
+
+    /* Champagne beige secondary */
+    --secondary: 20 40% 90%;
+    --secondary-foreground: 30 25% 15%;
+
+    /* Soft gray muted */
+    --muted: 30 10% 55%;
+    --muted-foreground: 30 12% 30%;
+
+    /* Champagne accent */
+    --accent: 20 40% 90%;
+    --accent-foreground: 351 45% 45%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 30 100% 99%;
+
+    --border: 20 20% 85%;
+    --input: 20 20% 85%;
+    --ring: 351 45% 45%;
+
+    --radius: 0.75rem;
+
+    /* Custom design tokens */
+    --gradient-rose: linear-gradient(135deg, hsl(351, 45%, 45%) 0%, hsl(351, 60%, 70%) 100%);
+    --gradient-champagne: linear-gradient(180deg, hsl(20, 40%, 90%) 0%, hsl(30, 40%, 97%) 100%);
+    --shadow-soft: 0 4px 20px -4px hsl(351 45% 45% / 0.18);
+    --shadow-glow: 0 0 30px hsl(351 60% 70% / 0.35);
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    --background: 30 10% 10%;
+    --foreground: 30 100% 99%;
+
+    --card: 30 10% 12%;
+    --card-foreground: 30 100% 99%;
+
+    --popover: 30 10% 12%;
+    --popover-foreground: 30 100% 99%;
+
+    --primary: 351 50% 75%;
+    --primary-foreground: 30 10% 10%;
+    --primary-glow: 351 60% 85%;
+
+    --secondary: 15 20% 20%;
+    --secondary-foreground: 30 100% 99%;
+
+    --muted: 30 11% 30%;
+    --muted-foreground: 30 11% 73%;
+
+    --accent: 15 20% 20%;
+    --accent-foreground: 351 50% 75%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 30 100% 99%;
+
+    --border: 30 10% 20%;
+    --input: 30 10% 20%;
+    --ring: 351 50% 75%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-manrope antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-cormorant;
+  }
+}
+
+@layer utilities {
+  .text-gradient-rose {
+    @apply bg-gradient-rose bg-clip-text text-transparent;
+  }
+
+  .hover-glow {
+    @apply transition-all duration-500 hover:shadow-glow;
+  }
+
+  .hover-lift {
+    @apply transition-transform duration-300 hover:-translate-y-1;
+  }
+}
+
