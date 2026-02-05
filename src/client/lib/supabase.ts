@@ -7,4 +7,15 @@ if (!supabaseUrl || !supabaseAnonKey) {
     console.warn("Supabase credentials missing. Admin features may not work.");
 }
 
-export const supabase = createClient(supabaseUrl || "", supabaseAnonKey || "");
+export const supabase = createClient(supabaseUrl || "", supabaseAnonKey || "", {
+    realtime: {
+        params: {
+            eventsPerSecond: 2,
+        },
+    },
+    global: {
+        headers: {
+            'x-application-name': 'xivi-jewellery',
+        },
+    },
+});

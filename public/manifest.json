@@ -8,10 +8,16 @@
     "theme_color": "#ffffff",
     "icons": [
         {
-            "src": "/new_logo-removebg-preview.png",
+            "src": "/favicon_xivi.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/favicon_xivi.png",
             "sizes": "512x512",
             "type": "image/png",
-            "purpose": "any maskable"
+            "purpose": "any"
         }
     ]
 }
