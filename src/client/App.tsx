@@ -10,6 +10,7 @@ import LoadingScreen from "./components/LoadingScreen";
 import { ProtectedRoute } from "./components/admin/ProtectedRoute";
 import { CartProvider } from "./context/cart";
 import ScrollToTop from "./components/ScrollToTop";
+import SchemaMarkup from "./components/SchemaMarkup";
 
 // Lazy-loaded components
 const Home = lazy(() => import("./pages/Home"));
@@ -41,6 +42,7 @@ const AppContent = () => {
   return (
     <>
       <ScrollToTop />
+      <SchemaMarkup />
       {!isAdminRoute && <Navigation />}
       <Suspense fallback={<LoadingScreen />}>
         <Routes>

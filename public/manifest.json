@@ -1,0 +1,17 @@
+{
+    "name": "XIVI | Exquisite Silver Jewellery",
+    "short_name": "XIVI",
+    "description": "Discover handcrafted 925 silver jewellery and accessories.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "icons": [
+        {
+            "src": "/favicon-gold.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ]
+}

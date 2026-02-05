@@ -1,8 +1,34 @@
 import aboutBanner from "@/assets/about-banner.jpg";
+import SEO from "@/components/SEO";
 
 const About = () => {
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://xivi.in/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "About",
+        "item": "https://xivi.in/about"
+      }
+    ]
+  };
+
   return (
     <main className="min-h-screen">
+      <SEO
+        title="About Us | Our Story & Craftsmanship"
+        description="Learn about XIVI's journey. Discover our commitment to handcrafted pure 925 silver jewellery and the artisans behind our timeless designs."
+        canonicalUrl="/about"
+        schemas={[breadcrumbSchema]}
+      />
       {/* Banner Section */}
       <section className="relative h-[80vh] overflow-hidden">
         <div

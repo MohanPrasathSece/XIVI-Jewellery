@@ -1,4 +1,5 @@
 import { useState } from "react";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -33,8 +34,69 @@ const Contact = () => {
     window.open(`https://wa.me/919742999547?text=${message}`, "_blank");
   };
 
+  const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": "JewelryStore",
+    "name": "XIVI Silver Jewellery",
+    "image": "https://xivi.in/src/client/assets/hero-jewelry.jpg",
+    "@id": "https://xivi.in/#organization",
+    "url": "https://xivi.in/contact",
+    "telephone": "+91-9742999547",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Bangalore",
+      "addressLocality": "Bangalore",
+      "addressRegion": "KA",
+      "postalCode": "560XXX",
+      "addressCountry": "IN"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 12.9716,
+      "longitude": 77.5946
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+      ],
+      "opens": "09:00",
+      "closes": "19:00"
+    }
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://xivi.in/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Contact",
+        "item": "https://xivi.in/contact"
+      }
+    ]
+  };
+
   return (
     <main className="min-h-screen pt-14 md:pt-16">
+      <SEO
+        title="Contact Us | Inquiry & Support"
+        description="Have questions about our silver jewellery? Reach out to XIVI. We're here to help with orders, styling advice, and custom inquiries."
+        canonicalUrl="/contact"
+        schemas={[localBusinessSchema, breadcrumbSchema]}
+      />
       {/* Header */}
       <section className="py-8 md:py-12 px-4 bg-gradient-champagne">
         <div className="container mx-auto max-w-4xl text-center animate-fade-in">

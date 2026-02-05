@@ -11,6 +11,7 @@ import product4 from "@/assets/product-4.jpg";
 import product5 from "@/assets/product-5.jpg";
 import product6 from "@/assets/product-6.jpg";
 import { Sparkles, ShieldCheck, Leaf } from "lucide-react";
+import SEO from "@/components/SEO";
 
 type FeaturedProduct = {
   id: number;
@@ -83,8 +84,81 @@ const Home = () => {
     navigate(`/products?category=${encodeURIComponent(category)}`);
   };
 
+  const featuredProductsSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Featured Silver Jewellery",
+    "itemListElement": products.map((product, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "Product",
+        "name": product.name,
+        "image": `https://xivi.in${product.image}`,
+        "description": `Exquisite handcrafted 925 silver ${product.name}.`,
+        "offers": {
+          "@type": "Offer",
+          "price": parsePrice(product.price),
+          "priceCurrency": "INR",
+          "availability": "https://schema.org/InStock"
+        }
+      }
+    }))
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://xivi.in/"
+      }
+    ]
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the purity of XIVI silver jewellery?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Every piece of XIVI jewellery is handcrafted from pure 925 sterling silver, ensuring the highest quality and lasting brilliance."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is XIVI jewellery handcrafted?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, our artisans blend traditional craftsmanship with modern design, shaping every piece slowly and thoughtfully by hand."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What types of jewellery does XIVI offer?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "XIVI offers a wide range of silver jewellery including celestial pendants, earrings, rings, bracelets, and layered sets."
+        }
+      }
+    ]
+  };
+
   return (
     <main className="min-h-screen">
+      <SEO
+        title="XIVI | Exquisite Silver Jewellery & Accessories"
+        description="Discover XIVI's handcrafted, timeless silver jewellery. Pure 925 sterling silver rings, necklaces, and bracelets designed for elegance."
+        canonicalUrl="/"
+        schemas={[featuredProductsSchema, breadcrumbSchema, faqSchema]}
+        preloadImage={heroImage}
+      />
       {/* Hero Section */}
       <section
         id="hero"

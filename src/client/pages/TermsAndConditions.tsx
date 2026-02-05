@@ -1,8 +1,14 @@
 import { motion } from "framer-motion";
+import SEO from "@/components/SEO";
 
 const TermsAndConditions = () => {
     return (
         <div className="pt-24 min-h-screen bg-slate-50 font-manrope">
+            <SEO
+                title="Terms & Conditions | Service Agreement"
+                description="Read our terms of service, including product pricing, order processing, and returns information for XIVI Silver Jewellery."
+                canonicalUrl="/terms-and-conditions"
+            />
             <div className="container mx-auto px-4 py-12 max-w-4xl">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

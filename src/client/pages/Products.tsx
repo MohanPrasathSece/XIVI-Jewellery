@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import SEO from "@/components/SEO";
 
 // Fallback images if Supabase is empty
 import earring1 from "@/assets/products/earring-1.jpg";
@@ -181,9 +182,69 @@ const Products = () => {
       description: `${product.name} now awaits in your XIVI collection.`,
     });
   };
+  const productListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": filteredProducts.slice(0, 20).map((product, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "Product",
+        "url": `https://xivi.in/products?category=${product.category}&id=${product.id}`,
+        "name": product.name,
+        "image": product.image.startsWith("http") ? product.image : `https://xivi.in${product.image}`,
+        "description": `Handcrafted 925 silver ${product.name} from XIVI.`,
+        "offers": {
+          "@type": "Offer",
+          "price": parsePrice(product.price),
+          "priceCurrency": "INR",
+          "availability": product.stock_status === false ? "https://schema.org/OutOfStock" : "https://schema.org/InStock"
+        }
+      }
+    }))
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://xivi.in/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Products",
+        "item": "https://xivi.in/products"
+      },
+      ...(selectedCategory !== "All" ? [{
+        "@type": "ListItem",
+        "position": 3,
+        "name": selectedCategory,
+        "item": `https://xivi.in/products?category=${selectedCategory}`
+      }] : [])
+    ]
+  };
+
+  const collectionPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "mainEntity": productListSchema,
+    "name": selectedCategory === "All" ? "Lumi Co Silver Collection" : `${selectedCategory} Collection`,
+    "description": `Browse our exclusive collection of ${selectedCategory.toLowerCase()} handcrafted from pure 925 silver.`
+  };
 
   return (
     <main className="min-h-screen pt-16">
+      <SEO
+        title={selectedCategory === "All" ? "Shop All Silver Jewellery" : `${selectedCategory} Collection`}
+        description={`Explore our ${selectedCategory.slice(0, 1).toLowerCase() + selectedCategory.slice(1)} collection. XIVI offers handcrafted 925 silver ${selectedCategory.toLowerCase()} for every occasion.`}
+        canonicalUrl={selectedCategory === "All" ? "/products" : `/products?category=${selectedCategory}`}
+        schemas={[productListSchema, breadcrumbSchema, collectionPageSchema]}
+      />
       <section className="py-12 px-4 bg-gradient-champagne">
         <div className="container mx-auto text-center">
           <h1 className="font-playfair text-4xl md:text-6xl font-bold mb-4 md:mb-6">

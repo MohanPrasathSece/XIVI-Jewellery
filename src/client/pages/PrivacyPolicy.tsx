@@ -1,8 +1,14 @@
 import { motion } from "framer-motion";
+import SEO from "@/components/SEO";
 
 const PrivacyPolicy = () => {
     return (
         <div className="pt-24 min-h-screen bg-slate-50 font-manrope">
+            <SEO
+                title="Privacy Policy | Data Protection & Security"
+                description="Our commitment to your privacy. Learn how XIVI handles and protects your personal information and payment data."
+                canonicalUrl="/privacy-policy"
+            />
             <div className="container mx-auto px-4 py-12 max-w-4xl">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
