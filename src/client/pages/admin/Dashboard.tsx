@@ -5,6 +5,7 @@ import Sidebar from "@/components/admin/Sidebar";
 import ProductManagement from "@/components/admin/ProductManagement";
 import OrderManagement from "@/components/admin/OrderManagement";
 import CategoryManagement from "@/components/admin/CategoryManagement";
+import GiftingManagement from "@/components/admin/GiftingManagement";
 import DashboardOverview from "@/components/admin/DashboardOverview";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -48,6 +49,7 @@ const AdminDashboard = () => {
                     <Route path="/" element={<DashboardOverview />} />
                     <Route path="/products" element={<ProductManagement />} />
                     <Route path="/categories" element={<CategoryManagement />} />
+                    <Route path="/gifting" element={<GiftingManagement />} />
                     <Route path="/orders" element={<OrderManagement />} />
                 </Routes>
             </div>

@@ -28,6 +28,9 @@ const orderSchema = z.object({
   })).min(1),
   notes: z.string().max(500).optional(),
   isGift: z.boolean().optional(),
+  giftOptionId: z.string().optional(),
+  giftOptionName: z.string().optional(),
+  giftOptionPrice: z.number().optional(),
 });
 
 const verifyRequiredFields = (data) => {
@@ -39,13 +42,14 @@ const verifyRequiredFields = (data) => {
   return result.data;
 };
 
-const calculateAmounts = (items) => {
-  const amount = items.reduce((total, item) => {
+const calculateAmounts = (items, giftPrice = 0) => {
+  const productsAmount = items.reduce((total, item) => {
     const itemPrice = Number(item.price) || 0;
     const itemQty = Number(item.quantity) || 0;
     return total + itemPrice * itemQty;
   }, 0);
 
+  const amount = productsAmount + (Number(giftPrice) || 0);
   const amountInPaise = Math.round(amount * 100);
 
   if (!amountInPaise) {
@@ -79,15 +83,17 @@ export const createOrder = async (req, res) => {
     }
 
     const validatedData = verifyRequiredFields(req.body);
-    const { customer, shippingAddress, items, notes, isGift } = validatedData;
+    const { customer, shippingAddress, items, notes, isGift, giftOptionName, giftOptionPrice } = validatedData;
 
-    // Append gift option to notes
+    // Append gift option to notes if it's the old boolean gift
     let finalNotes = notes || "";
-    if (isGift) {
+    if (isGift && !giftOptionName) {
       finalNotes = finalNotes ? `${finalNotes} | GIFT OPTION: YES` : "GIFT OPTION: YES";
+    } else if (giftOptionName) {
+      finalNotes = finalNotes ? `${finalNotes} | GIFT: ${giftOptionName} (₹${giftOptionPrice})` : `GIFT: ${giftOptionName} (₹${giftOptionPrice})`;
     }
 
-    const { amount, amountInPaise } = calculateAmounts(items);
+    const { amount, amountInPaise } = calculateAmounts(items, giftOptionPrice);
 
     const razorpayOrder = await razorpayClient.orders.create({
       amount: amountInPaise,
@@ -113,7 +119,9 @@ export const createOrder = async (req, res) => {
       phone: customer.phone,
       address: `${shippingAddress.line1}, ${shippingAddress.line2 || ""}, ${shippingAddress.city}, ${shippingAddress.state} ${shippingAddress.postalCode}, ${shippingAddress.country}`,
       products: JSON.stringify(items),
-      notes: finalNotes
+      notes: finalNotes,
+      gift_option_name: giftOptionName || null,
+      gift_option_price: giftOptionPrice || 0
     }]).select().single();
 
     if (supaError) {

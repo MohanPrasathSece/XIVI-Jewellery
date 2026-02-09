@@ -1,4 +1,5 @@
-import { useState, type ChangeEvent } from "react";
+import { useState, useEffect, type ChangeEvent } from "react";
+import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,6 +10,7 @@ import { openRazorpayCheckout } from "@/lib/razorpay";
 import { getApiUrl } from "@/lib/config";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
 const formatter = new Intl.NumberFormat("en-IN", {
   style: "currency",
@@ -56,7 +58,24 @@ const Cart = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isRazorpayLoading, setIsRazorpayLoading] = useState(false);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+  const [giftingOptions, setGiftingOptions] = useState<any[]>([]);
+  const [selectedGiftOption, setSelectedGiftOption] = useState<any>(null);
+  const [giftLoading, setGiftLoading] = useState(false);
   const hasItems = items.length > 0;
+
+  useEffect(() => {
+    const fetchGifting = async () => {
+      setGiftLoading(true);
+      const { data } = await supabase
+        .from("gifting_options")
+        .select("*")
+        .eq("is_active", true)
+        .order("price", { ascending: true });
+      if (data) setGiftingOptions(data);
+      setGiftLoading(false);
+    };
+    fetchGifting();
+  }, []);
 
   const handleQuantityChange = (id: number | string, delta: number) => {
     const current = items.find((item) => item.id === id);
@@ -65,7 +84,9 @@ const Cart = () => {
     updateQuantity(id, Math.max(0, nextQuantity));
   };
 
+  const total = subtotal + (selectedGiftOption?.price || 0);
   const formattedSubtotal = formatter.format(subtotal);
+  const formattedTotal = formatter.format(total);
 
   const handleCustomerChange = <Field extends keyof CustomerDetails>(field: Field) =>
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -148,7 +169,10 @@ const Cart = () => {
           shippingAddress: address,
           items,
           notes,
-          isGift,
+          isGift: !!selectedGiftOption,
+          giftOptionId: selectedGiftOption?.id,
+          giftOptionName: selectedGiftOption?.name,
+          giftOptionPrice: selectedGiftOption?.price,
         }),
       });
 
@@ -196,7 +220,7 @@ const Cart = () => {
             setCustomer(createInitialCustomer());
             setAddress(createInitialAddress());
             setNotes("");
-            setIsGift(false);
+            setSelectedGiftOption(null);
             setIsConfirmationOpen(true);
           } catch (error) {
             const message = error instanceof Error ? error.message : "Unable to verify payment.";
@@ -360,13 +384,19 @@ const Cart = () => {
                     <span>Subtotal</span>
                     <span>{formattedSubtotal}</span>
                   </div>
+                  {selectedGiftOption && (
+                    <div className="flex items-center justify-between text-primary">
+                      <span>{selectedGiftOption.name}</span>
+                      <span>{formatter.format(selectedGiftOption.price)}</span>
+                    </div>
+                  )}
                   <div className="flex items-center justify-between">
                     <span>Shipping</span>
                     <span>{hasItems ? "Calculated at checkout" : "–"}</span>
                   </div>
-                  <div className="flex items-center justify-between font-medium text-foreground text-base border-t border-border/50 pt-2.5">
-                    <span>Total items</span>
-                    <span>{totalQuantity}</span>
+                  <div className="flex items-center justify-between font-semibold text-foreground text-lg border-t border-border/50 pt-2.5">
+                    <span>Grand Total</span>
+                    <span>{formattedTotal}</span>
                   </div>
                 </div>
 
@@ -419,19 +449,43 @@ const Cart = () => {
                       <Label htmlFor="order-notes">Notes (optional)</Label>
                       <Textarea id="order-notes" value={notes} onChange={handleNotesChange} disabled={!hasItems || isProcessing} />
                     </div>
-                    <div className="flex items-center space-x-2 pt-2">
-                      <input
-                        type="checkbox"
-                        id="gift-option"
-                        checked={isGift}
-                        onChange={(e) => setIsGift(e.target.checked)}
-                        className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                        disabled={!hasItems || isProcessing}
-                      />
-                      <Label htmlFor="gift-option" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                        Gift this order (Complimentary wrapping included)
-                      </Label>
-                    </div>
+                    {giftingOptions.length > 0 && (
+                      <div className="space-y-3 pt-2">
+                        <Label className="text-sm font-semibold">Gifting Options</Label>
+                        <div className="grid grid-cols-1 gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedGiftOption(null)}
+                            className={cn(
+                              "flex items-center justify-between p-3 rounded-xl border transition-all text-left",
+                              !selectedGiftOption ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border hover:bg-slate-50"
+                            )}
+                            disabled={!hasItems || isProcessing}
+                          >
+                            <span className="text-sm">No Gifting</span>
+                            <span className="text-xs text-muted-foreground">Free</span>
+                          </button>
+                          {giftingOptions.map((opt) => (
+                            <button
+                              key={opt.id}
+                              type="button"
+                              onClick={() => setSelectedGiftOption(opt)}
+                              className={cn(
+                                "flex items-center justify-between p-3 rounded-xl border transition-all text-left",
+                                selectedGiftOption?.id === opt.id ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border hover:bg-slate-50"
+                              )}
+                              disabled={!hasItems || isProcessing}
+                            >
+                              <div className="flex flex-col">
+                                <span className="text-sm font-medium">{opt.name}</span>
+                                {opt.description && <span className="text-[10px] text-muted-foreground line-clamp-1">{opt.description}</span>}
+                              </div>
+                              <span className="text-sm font-semibold text-primary">{formatter.format(opt.price)}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
 

@@ -114,13 +114,15 @@ const OrderManagement = () => {
             return;
         }
 
-        const headers = ["Order ID", "Customer", "Email", "Phone", "Status", "Total", "Date", "Time", "Address"];
+        const headers = ["Order ID", "Customer", "Email", "Phone", "Status", "Gifting", "Gift Price", "Total", "Date", "Time", "Address"];
         const rows = filteredOrders.map(o => [
             o.id,
             `"${o.customer_name}"`,
             o.email,
             o.phone,
             o.status,
+            `"${o.gift_option_name || 'None'}"`,
+            o.gift_option_price || 0,
             o.total_price,
             `"${new Date(o.created_at).getFullYear()}-${String(new Date(o.created_at).getMonth() + 1).padStart(2, '0')}-${String(new Date(o.created_at).getDate()).padStart(2, '0')}"`,
             `"${new Date(o.created_at).getHours().toString().padStart(2, '0')}:${new Date(o.created_at).getMinutes().toString().padStart(2, '0')}:${new Date(o.created_at).getSeconds().toString().padStart(2, '0')}"`,
@@ -279,6 +281,18 @@ const OrderManagement = () => {
                                         <div>
                                             <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Order Notes</h4>
                                             <p className="text-sm text-slate-800 font-medium bg-amber-50 border border-amber-100 p-4 rounded-2xl">{selectedOrder.notes}</p>
+                                        </div>
+                                    )}
+                                    {selectedOrder.gift_option_name && (
+                                        <div>
+                                            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Selected Gifting</h4>
+                                            <div className="bg-primary/5 border border-primary/10 p-4 rounded-2xl flex justify-between items-center">
+                                                <div className="flex items-center gap-2">
+                                                    <Sparkles className="w-4 h-4 text-primary" />
+                                                    <span className="text-sm font-bold text-slate-800">{selectedOrder.gift_option_name}</span>
+                                                </div>
+                                                <span className="text-sm font-bold text-primary">₹{selectedOrder.gift_option_price}</span>
+                                            </div>
                                         </div>
                                     )}
                                 </div>

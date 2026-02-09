@@ -25,6 +25,7 @@ const Sidebar = ({ onLogout, isOpen, onClose }: SidebarProps) => {
         { icon: LayoutDashboard, label: "Overview", path: "/admin-portal" },
         { icon: ShoppingBag, label: "Products", path: "/admin-portal/products" },
         { icon: ListTree, label: "Categories", path: "/admin-portal/categories" },
+        { icon: Sparkles, label: "Gifting Options", path: "/admin-portal/gifting" },
         { icon: ClipboardList, label: "Orders", path: "/admin-portal/orders" },
     ];
 
