@@ -60,6 +60,7 @@ const Cart = () => {
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const [giftingOptions, setGiftingOptions] = useState<any[]>([]);
   const [selectedGiftOption, setSelectedGiftOption] = useState<any>(null);
+  const [customGiftText, setCustomGiftText] = useState("");
   const [giftLoading, setGiftLoading] = useState(false);
   const hasItems = items.length > 0;
 
@@ -173,6 +174,7 @@ const Cart = () => {
           giftOptionId: selectedGiftOption?.id,
           giftOptionName: selectedGiftOption?.name,
           giftOptionPrice: selectedGiftOption?.price,
+          giftCustomText: customGiftText,
         }),
       });
 
@@ -221,6 +223,7 @@ const Cart = () => {
             setAddress(createInitialAddress());
             setNotes("");
             setSelectedGiftOption(null);
+            setCustomGiftText("");
             setIsConfirmationOpen(true);
           } catch (error) {
             const message = error instanceof Error ? error.message : "Unable to verify payment.";
@@ -484,6 +487,20 @@ const Cart = () => {
                             </button>
                           ))}
                         </div>
+                        {selectedGiftOption?.allow_custom_text && (
+                          <div className="mt-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                            <Label htmlFor="custom-gift-text" className="text-sm font-medium text-slate-700">Personalized Message</Label>
+                            <Input
+                              id="custom-gift-text"
+                              placeholder="Type your message here..."
+                              value={customGiftText}
+                              onChange={(e) => setCustomGiftText(e.target.value)}
+                              className="rounded-xl border-primary/20 focus:border-primary"
+                              disabled={isProcessing}
+                            />
+                            <p className="text-[10px] text-muted-foreground italic">This message will be included with your gift.</p>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>

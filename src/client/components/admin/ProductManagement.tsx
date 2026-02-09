@@ -111,6 +111,7 @@ const ProductManagement = () => {
             }
             setIsDialogOpen(false);
             resetForm();
+            fetchProducts();
         } catch (error: any) {
             toast({ title: "Error", description: error.message, variant: "destructive" });
         } finally {
@@ -126,6 +127,7 @@ const ProductManagement = () => {
             toast({ title: "Error", description: error.message, variant: "destructive" });
         } else {
             toast({ title: "Product Deleted" });
+            fetchProducts();
         }
     };
 

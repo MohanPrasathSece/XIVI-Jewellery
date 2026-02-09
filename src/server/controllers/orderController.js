@@ -31,6 +31,7 @@ const orderSchema = z.object({
   giftOptionId: z.string().optional(),
   giftOptionName: z.string().optional(),
   giftOptionPrice: z.number().optional(),
+  giftCustomText: z.string().optional(),
 });
 
 const verifyRequiredFields = (data) => {
@@ -83,7 +84,7 @@ export const createOrder = async (req, res) => {
     }
 
     const validatedData = verifyRequiredFields(req.body);
-    const { customer, shippingAddress, items, notes, isGift, giftOptionName, giftOptionPrice } = validatedData;
+    const { customer, shippingAddress, items, notes, isGift, giftOptionName, giftOptionPrice, giftCustomText } = validatedData;
 
     // Append gift option to notes if it's the old boolean gift
     let finalNotes = notes || "";
@@ -91,6 +92,9 @@ export const createOrder = async (req, res) => {
       finalNotes = finalNotes ? `${finalNotes} | GIFT OPTION: YES` : "GIFT OPTION: YES";
     } else if (giftOptionName) {
       finalNotes = finalNotes ? `${finalNotes} | GIFT: ${giftOptionName} (₹${giftOptionPrice})` : `GIFT: ${giftOptionName} (₹${giftOptionPrice})`;
+      if (giftCustomText) {
+        finalNotes = `${finalNotes} | MSG: ${giftCustomText}`;
+      }
     }
 
     const { amount, amountInPaise } = calculateAmounts(items, giftOptionPrice);
@@ -121,7 +125,8 @@ export const createOrder = async (req, res) => {
       products: JSON.stringify(items),
       notes: finalNotes,
       gift_option_name: giftOptionName || null,
-      gift_option_price: giftOptionPrice || 0
+      gift_option_price: giftOptionPrice || 0,
+      gift_custom_text: giftCustomText || null
     }]).select().single();
 
     if (supaError) {

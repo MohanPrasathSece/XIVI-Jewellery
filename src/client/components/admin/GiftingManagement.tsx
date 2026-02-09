@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Edit2, Trash2, Gift, Eye, EyeOff } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface GiftingOption {
     id: string;
@@ -20,6 +21,7 @@ interface GiftingOption {
     description: string;
     price: number;
     is_active: boolean;
+    allow_custom_text: boolean;
 }
 
 const GiftingManagement = () => {
@@ -34,6 +36,7 @@ const GiftingManagement = () => {
         description: "",
         price: 0,
         is_active: true,
+        allow_custom_text: false,
     });
 
     const fetchOptions = async () => {
@@ -75,6 +78,7 @@ const GiftingManagement = () => {
             description: formData.description,
             price: formData.price,
             is_active: formData.is_active,
+            allow_custom_text: formData.allow_custom_text,
         };
 
         try {
@@ -92,6 +96,7 @@ const GiftingManagement = () => {
             }
             setIsDialogOpen(false);
             resetForm();
+            fetchOptions();
         } catch (error: any) {
             toast({ title: "Error", description: error.message, variant: "destructive" });
         } finally {
@@ -107,6 +112,7 @@ const GiftingManagement = () => {
             toast({ title: "Error", description: error.message, variant: "destructive" });
         } else {
             toast({ title: "Gifting Option Deleted" });
+            fetchOptions();
         }
     };
 
@@ -117,6 +123,7 @@ const GiftingManagement = () => {
             description: "",
             price: 0,
             is_active: true,
+            allow_custom_text: false,
         });
     };
 
@@ -127,6 +134,7 @@ const GiftingManagement = () => {
             description: option.description || "",
             price: option.price,
             is_active: option.is_active,
+            allow_custom_text: option.allow_custom_text || false,
         });
         setIsDialogOpen(true);
     };
@@ -151,36 +159,36 @@ const GiftingManagement = () => {
                         <form onSubmit={handleSave} className="space-y-4">
                             <div className="space-y-2">
                                 <Label>Option Name</Label>
-                                <Input 
-                                    value={formData.name} 
-                                    onChange={e => setFormData({ ...formData, name: e.target.value })} 
+                                <Input
+                                    value={formData.name}
+                                    onChange={e => setFormData({ ...formData, name: e.target.value })}
                                     placeholder="e.g. Luxury Gift Wrap"
-                                    required 
-                                    className="rounded-xl border-slate-200" 
+                                    required
+                                    className="rounded-xl border-slate-200"
                                 />
                             </div>
                             <div className="space-y-2">
                                 <Label>Description</Label>
-                                <Textarea 
-                                    value={formData.description} 
-                                    onChange={e => setFormData({ ...formData, description: e.target.value })} 
+                                <Textarea
+                                    value={formData.description}
+                                    onChange={e => setFormData({ ...formData, description: e.target.value })}
                                     placeholder="Brief details about this gifting service..."
-                                    className="rounded-xl border-slate-200" 
+                                    className="rounded-xl border-slate-200"
                                 />
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <Label>Price (₹)</Label>
-                                    <Input 
-                                        type="number" 
-                                        value={formData.price} 
-                                        onChange={e => setFormData({ ...formData, price: Number(e.target.value) })} 
-                                        required 
-                                        className="rounded-xl border-slate-200" 
+                                    <Input
+                                        type="number"
+                                        value={formData.price}
+                                        onChange={e => setFormData({ ...formData, price: Number(e.target.value) })}
+                                        required
+                                        className="rounded-xl border-slate-200"
                                     />
                                 </div>
                                 <div className="flex items-end pb-1">
-                                    <div 
+                                    <div
                                         className="flex items-center gap-2 cursor-pointer h-10 px-3 border rounded-xl"
                                         onClick={() => setFormData({ ...formData, is_active: !formData.is_active })}
                                     >
@@ -188,6 +196,18 @@ const GiftingManagement = () => {
                                         <span className="text-sm font-medium">{formData.is_active ? "Active" : "Hidden"}</span>
                                     </div>
                                 </div>
+                            </div>
+                            <div className="flex items-center space-x-2 pt-2">
+                                <input
+                                    type="checkbox"
+                                    id="allow-custom-text"
+                                    checked={formData.allow_custom_text}
+                                    onChange={(e) => setFormData({ ...formData, allow_custom_text: e.target.checked })}
+                                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                />
+                                <Label htmlFor="allow-custom-text" className="text-sm font-medium">
+                                    Allow customer to add personalized text
+                                </Label>
                             </div>
                             <Button type="submit" className="w-full rounded-full bg-gradient-rose text-white h-12 mt-4" disabled={loading}>
                                 {loading ? "Processing..." : "Save Gifting Option"}
@@ -227,6 +247,12 @@ const GiftingManagement = () => {
                                     {option.is_active ? "Active" : "Disabled"}
                                 </span>
                             </div>
+                            {option.allow_custom_text && (
+                                <div className="mt-3 pt-3 border-t border-slate-50 flex items-center gap-2 text-[10px] text-slate-400 font-medium italic">
+                                    <Edit2 className="w-3 h-3" />
+                                    Supports personalized text
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>

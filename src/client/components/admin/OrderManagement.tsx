@@ -284,15 +284,21 @@ const OrderManagement = () => {
                                         </div>
                                     )}
                                     {selectedOrder.gift_option_name && (
-                                        <div>
+                                        <div className="space-y-2">
                                             <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Selected Gifting</h4>
-                                            <div className="bg-primary/5 border border-primary/10 p-4 rounded-2xl flex justify-between items-center">
+                                            <div className="bg-primary/5 border border-primary/10 p-4 rounded-2xl flex justify-between items-center text-left">
                                                 <div className="flex items-center gap-2">
                                                     <Sparkles className="w-4 h-4 text-primary" />
                                                     <span className="text-sm font-bold text-slate-800">{selectedOrder.gift_option_name}</span>
                                                 </div>
                                                 <span className="text-sm font-bold text-primary">₹{selectedOrder.gift_option_price}</span>
                                             </div>
+                                            {selectedOrder.gift_custom_text && (
+                                                <div className="bg-slate-50 border border-slate-100 p-4 rounded-2xl text-left">
+                                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Personalized Message</p>
+                                                    <p className="text-sm italic text-slate-600">"{selectedOrder.gift_custom_text}"</p>
+                                                </div>
+                                            )}
                                         </div>
                                     )}
                                 </div>
