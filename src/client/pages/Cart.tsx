@@ -115,14 +115,14 @@ const Cart = () => {
     return parts;
   };
 
-  const handleCheckout = async () => {
+  const validateDetails = () => {
     if (!hasItems) {
       toast({
         title: "Your cart is empty",
         description: "Add a few radiant pieces before checking out.",
         variant: "destructive",
       });
-      return;
+      return false;
     }
 
     const requiredCustomerFields: { value: string; label: string }[] = [
@@ -138,7 +138,7 @@ const Cart = () => {
         description: `Please provide ${missingCustomer.label} to continue.`,
         variant: "destructive",
       });
-      return;
+      return false;
     }
 
     const requiredAddressFields: { value: string; label: string }[] = [
@@ -156,8 +156,46 @@ const Cart = () => {
         description: `Please provide ${missingAddress.label} to continue.`,
         variant: "destructive",
       });
-      return;
+      return false;
     }
+
+    return true;
+  };
+
+  const handleWhatsAppCheckout = () => {
+    if (!validateDetails()) return;
+
+    const message = `Hello XIVI, I would like to order the following items:
+
+*Items:*
+${items.map((item) => `- ${item.name} (x${item.quantity}) - ${formatter.format(item.price * item.quantity)}`).join("\n")}
+
+*Subtotal:* ${formatter.format(subtotal)}
+${selectedGiftOption ? `*Gifting:* ${selectedGiftOption.name} (+${formatter.format(selectedGiftOption.price)})` : "*Gifting:* No"}
+${customGiftText ? `*Gift Message:* ${customGiftText}` : ""}
+
+*Grand Total: ${formatter.format(total)}*
+
+-------------------
+*My Details:*
+Name: ${customer.name}
+Phone: ${customer.phone}
+Email: ${customer.email}
+
+*Shipping Address:*
+${formatAddressForNotes()}
+
+${notes ? `*Additional Notes:* ${notes}` : ""}
+
+Please confirm my order. Thank you!`.trim();
+
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/919742999547?text=${encodedMessage}`;
+    window.open(whatsappUrl, "_blank");
+  };
+
+  const handleCheckout = async () => {
+    if (!validateDetails()) return;
 
     try {
       setIsProcessing(true);
@@ -521,7 +559,7 @@ const Cart = () => {
                   <Button
                     variant="ghost"
                     className="w-full text-muted-foreground hover:text-primary"
-                    disabled
+                    onClick={handleWhatsAppCheckout}
                   >
                     Checkout with WhatsApp
                   </Button>
