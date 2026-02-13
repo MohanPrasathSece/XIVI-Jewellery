@@ -29,9 +29,9 @@ export const adminAuth = async (req, res, next) => {
             return res.status(403).json({ error: "Invalid or expired security token. Access denied." });
         }
 
-        // Strict Security Check: Ensure the user is the designated owner
-        const ownerEmail = process.env.OWNER_EMAIL || "hello@xivi.in";
-        if (user.email !== ownerEmail) {
+        // Strict Security Check: Ensure the user is in the designated owner list
+        const ownerEmails = (process.env.OWNER_EMAIL || "hello@xivi.in").split(",").map(e => e.trim());
+        if (!ownerEmails.includes(user.email)) {
             console.warn(`Unauthorized access attempt by: ${user.email}`);
             return res.status(403).json({ error: "Unauthorized. You do not have admin privileges." });
         }

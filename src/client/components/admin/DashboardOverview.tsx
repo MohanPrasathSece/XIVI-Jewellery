@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import {
     ShoppingBag,
@@ -10,6 +11,7 @@ import {
 } from "lucide-react";
 
 const DashboardOverview = () => {
+    const navigate = useNavigate();
     const [stats, setStats] = useState({
         products: 0,
         orders: 0,
@@ -92,7 +94,10 @@ const DashboardOverview = () => {
                 <div className="bg-white p-5 md:p-8 rounded-3xl shadow-soft border border-slate-100">
                     <div className="flex items-center justify-between mb-6">
                         <h3 className="text-lg md:text-xl font-bold text-slate-800">Recent Orders</h3>
-                        <button className="text-primary text-sm font-medium flex items-center gap-1 hover:underline">
+                        <button
+                            onClick={() => navigate("/admin-portal/orders")}
+                            className="text-primary text-sm font-medium flex items-center gap-1 hover:underline"
+                        >
                             View All <ArrowUpRight className="w-4 h-4" />
                         </button>
                     </div>
@@ -118,7 +123,10 @@ const DashboardOverview = () => {
                 <div className="bg-white p-5 md:p-8 rounded-3xl shadow-soft border border-slate-100">
                     <div className="flex items-center justify-between mb-6">
                         <h3 className="text-lg md:text-xl font-bold text-slate-800">New Products</h3>
-                        <button className="text-primary text-sm font-medium flex items-center gap-1 hover:underline">
+                        <button
+                            onClick={() => navigate("/admin-portal/products")}
+                            className="text-primary text-sm font-medium flex items-center gap-1 hover:underline"
+                        >
                             Add New <ArrowUpRight className="w-4 h-4" />
                         </button>
                     </div>

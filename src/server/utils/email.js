@@ -124,6 +124,7 @@ export const sendStatusUpdateEmail = async ({ email, customerName, status, order
   const statusMessages = {
     Confirmed: "Great news! Your silver order has been confirmed and is now being prepared by our master artisans.",
     Shipped: `Your silver adornments are on their way! They've officially left our atelier.`,
+    "Out for Delivery": "Your XIVI package is out for delivery! Our courier partner will be reaching you shortly.",
     Delivered: "The wait is over! Your XIVI pieces have been delivered. We hope they bring radiance to your day.",
     Cancelled: "Your order has been cancelled as requested or due to processing issues. If this was a mistake, please reach out.",
   };
@@ -131,7 +132,7 @@ export const sendStatusUpdateEmail = async ({ email, customerName, status, order
   const message = statusMessages[status] || `Your order status has been updated to ${status}.`;
 
   let trackingBlock = "";
-  if (status === 'Shipped' && (trackingId || trackingNumber)) {
+  if ((status === 'Shipped' || status === 'Out for Delivery') && (trackingId || trackingNumber)) {
     trackingBlock = `
       <div style="margin-top: 20px; padding: 15px; background-color: #f0fdf4; border-left: 4px solid #10b981; border-radius: 4px;">
         <h4 style="margin: 0 0 10px 0; color: #065f46;">Tracking Information</h4>

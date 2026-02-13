@@ -37,7 +37,7 @@ const OrderManagement = () => {
     const [orders, setOrders] = useState<any[]>([]);
     const [selectedOrder, setSelectedOrder] = useState<any>(null);
     const [loading, setLoading] = useState(true);
-    const [confirmAction, setConfirmAction] = useState<{ type: 'status' | 'tracking', order: any, value?: string } | null>(null);
+    const [confirmAction, setConfirmAction] = useState<{ type: 'status' | 'tracking' | 'cleanup', order: any, value?: string } | null>(null);
     const { toast } = useToast();
 
     const fetchOrders = async () => {
@@ -145,8 +145,10 @@ const OrderManagement = () => {
     };
 
     const triggerManualCleanup = async () => {
-        if (!confirm("Are you sure you want to archive orders older than 30 days and send them to email? This will delete them from the database.")) return;
+        setConfirmAction({ type: 'cleanup', order: null });
+    };
 
+    const handleCleanup = async () => {
         try {
             const session = await supabase.auth.getSession();
             const res = await fetch("/api/orders/cleanup", {
@@ -168,6 +170,7 @@ const OrderManagement = () => {
         Pending: <Clock className="w-4 h-4 text-amber-500" />,
         Confirmed: <CheckCircle2 className="w-4 h-4 text-blue-500" />,
         Shipped: <Truck className="w-4 h-4 text-purple-500" />,
+        "Out for Delivery": <Truck className="w-4 h-4 text-amber-500" />,
         Delivered: <CheckCircle2 className="w-4 h-4 text-emerald-500" />,
         Cancelled: <XCircle className="w-4 h-4 text-red-500" />,
     };
@@ -331,25 +334,36 @@ const OrderManagement = () => {
                                         </div>
                                         <div>
                                             <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 md:text-right">Tracking Link</h4>
-                                            <Input
-                                                placeholder="https://tracking.link/..."
-                                                value={selectedOrder.tracking_number || ""}
-                                                onChange={(e) => setSelectedOrder({ ...selectedOrder, tracking_number: e.target.value })}
-                                                onBlur={async (e) => {
-                                                    await supabase.from("orders").update({ tracking_number: e.target.value }).eq("id", selectedOrder.id);
-                                                }}
-                                                className="md:text-right h-10 rounded-xl border-slate-200 focus:ring-emerald-500"
-                                            />
+                                            <div className="flex gap-2">
+                                                <Input
+                                                    placeholder="https://tracking.link/..."
+                                                    value={selectedOrder.tracking_number || ""}
+                                                    onChange={(e) => setSelectedOrder({ ...selectedOrder, tracking_number: e.target.value })}
+                                                    onBlur={async (e) => {
+                                                        await supabase.from("orders").update({ tracking_number: e.target.value }).eq("id", selectedOrder.id);
+                                                    }}
+                                                    className="md:text-right h-10 rounded-xl border-slate-200 focus:ring-emerald-500 flex-1"
+                                                />
+                                                <Button
+                                                    variant="outline"
+                                                    size="icon"
+                                                    onClick={() => setConfirmAction({ type: 'tracking', order: selectedOrder })}
+                                                    className="rounded-xl border-slate-200 text-slate-400 hover:text-primary hover:border-primary"
+                                                    title="Notify customer about tracking"
+                                                >
+                                                    <ExternalLink className="w-4 h-4" />
+                                                </Button>
+                                            </div>
+                                            <p className="text-[10px] text-slate-400 mt-1">Status changes to 'Shipped' or 'Out for Delivery' automatically notify the customer.</p>
                                         </div>
-                                        <p className="text-[10px] text-slate-400 mt-1">Tracking info is automatically included in the 'Shipped' status email.</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="mt-8 pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6">
                                 <div className="flex flex-wrap justify-center gap-2 w-full md:w-auto">
-                                    {['Confirmed', 'Shipped', 'Delivered', 'Cancelled'].map((status) => {
-                                        const steps = ['Confirmed', 'Shipped', 'Delivered'];
+                                    {['Confirmed', 'Shipped', 'Out for Delivery', 'Delivered', 'Cancelled'].map((status) => {
+                                        const steps = ['Confirmed', 'Shipped', 'Out for Delivery', 'Delivered'];
                                         const currentStepIndex = steps.indexOf(selectedOrder.status);
                                         const thisStepIndex = steps.indexOf(status);
 
@@ -410,7 +424,9 @@ const OrderManagement = () => {
                         <AlertDialogDescription>
                             {confirmAction?.type === 'status'
                                 ? `You are changing the order status to ${confirmAction.value}. This will send an automated email update to the customer.`
-                                : "This will send the current tracking link/ID to the customer via email. Please ensure the link is correct."}
+                                : confirmAction?.type === 'tracking'
+                                    ? "This will send the current tracking link/ID to the customer via email. Use this if you already shipped the order but are adding the tracking info now."
+                                    : "Are you sure you want to archive orders older than 30 days and send them to email? This will delete them from the database."}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter className="flex-col gap-2 md:flex-row">
@@ -420,6 +436,10 @@ const OrderManagement = () => {
                             onClick={() => {
                                 if (confirmAction?.type === 'status') {
                                     updateStatus(confirmAction.order, confirmAction.value!);
+                                } else if (confirmAction?.type === 'tracking') {
+                                    updateStatus(confirmAction.order, confirmAction.order.status);
+                                } else if (confirmAction?.type === 'cleanup') {
+                                    handleCleanup();
                                 }
                                 setConfirmAction(null);
                             }}
@@ -429,7 +449,7 @@ const OrderManagement = () => {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </div>
+        </div >
     );
 };
 

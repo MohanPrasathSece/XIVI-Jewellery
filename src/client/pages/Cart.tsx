@@ -11,7 +11,7 @@ import { getApiUrl } from "@/lib/config";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Gift } from "lucide-react";
+import { Gift, Maximize2, X } from "lucide-react";
 
 const formatter = new Intl.NumberFormat("en-IN", {
   style: "currency",
@@ -63,6 +63,7 @@ const Cart = () => {
   const [selectedGiftOption, setSelectedGiftOption] = useState<any>(null);
   const [customGiftText, setCustomGiftText] = useState("");
   const [giftLoading, setGiftLoading] = useState(false);
+  const [zoomedImage, setZoomedImage] = useState<string | null>(null);
   const hasItems = items.length > 0;
 
   useEffect(() => {
@@ -330,7 +331,7 @@ Please confirm my order. Thank you!`.trim();
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-10 animate-fade-in">
               <p className="uppercase tracking-[0.35em] text-xs text-muted-foreground mb-3">Your Cart</p>
-              <h1 className="font-cormorant text-4xl md:text-5xl font-semibold text-gradient-rose">
+              <h1 className="font-cormorant text-4xl md:text-5xl font-semibold text-gradient-rose pb-1">
                 Curate your luminous ensemble
               </h1>
               <p className="text-muted-foreground max-w-2xl mx-auto mt-4">
@@ -518,14 +519,25 @@ Please confirm my order. Thank you!`.trim();
                               type="button"
                               onClick={() => setSelectedGiftOption(opt)}
                               className={cn(
-                                "flex flex-col p-3 rounded-2xl border transition-all text-left group",
+                                "flex flex-col p-3 rounded-2xl border transition-all text-left group relative",
                                 selectedGiftOption?.id === opt.id ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border hover:bg-slate-50"
                               )}
                               disabled={!hasItems || isProcessing}
                             >
-                              <div className="w-full aspect-square rounded-xl overflow-hidden border border-slate-100 mb-3 bg-white">
+                              <div className="w-full aspect-square rounded-xl overflow-hidden border border-slate-100 mb-3 bg-white relative">
                                 {opt.image_url ? (
-                                  <img src={opt.image_url} alt={opt.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                  <>
+                                    <img src={opt.image_url} alt={opt.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                    <div
+                                      className="absolute top-2 right-2 p-2 bg-white/80 backdrop-blur-sm rounded-lg opacity-0 group-hover:opacity-100 transition-all cursor-zoom-in shadow-sm hover:bg-white"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setZoomedImage(opt.image_url);
+                                      }}
+                                    >
+                                      <Maximize2 className="w-3.5 h-3.5 text-slate-600" />
+                                    </div>
+                                  </>
                                 ) : (
                                   <div className="w-full h-full flex items-center justify-center bg-slate-50">
                                     <Gift className="w-8 h-8 text-slate-200" />
@@ -588,6 +600,25 @@ Please confirm my order. Thank you!`.trim();
           </div>
         </section>
       </main>
+      <Dialog open={!!zoomedImage} onOpenChange={() => setZoomedImage(null)}>
+        <DialogContent className="max-w-[90vw] md:max-w-xl p-0 overflow-hidden border-0 bg-transparent shadow-none outline-none">
+          <div className="relative w-full">
+            {zoomedImage && (
+              <img
+                src={zoomedImage}
+                alt="Zoomed Gift"
+                className="w-full h-auto max-h-[85vh] object-contain rounded-3xl shadow-2xl"
+              />
+            )}
+            <button
+              onClick={() => setZoomedImage(null)}
+              className="absolute top-4 right-4 p-3 bg-white/90 backdrop-blur-sm rounded-full text-slate-800 hover:bg-white transition-all shadow-xl hover:scale-110 active:scale-95"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
