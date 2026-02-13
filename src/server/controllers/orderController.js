@@ -4,6 +4,17 @@ import { getRazorpayClient } from "../lib/razorpay.js";
 import { sendOrderEmails, sendStatusUpdateEmail, sendLowStockEmail } from "../utils/email.js";
 import { supabase } from "../lib/supabase.js";
 
+const getDisplayId = (order) => {
+  if (order.order_number) return order.order_number;
+  let hash = 0;
+  const oId = order.id || "";
+  for (let i = 0; i < oId.length; i++) {
+    hash = ((hash << 5) - hash) + oId.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash % 9000) + 1000;
+};
+
 import { z } from "zod";
 
 const orderSchema = z.object({
@@ -263,7 +274,8 @@ export const verifyPayment = async (req, res) => {
           customer: { name: updatedOrder.customer_name, email: updatedOrder.email, phone: updatedOrder.phone },
           items: JSON.parse(updatedOrder.products),
           amount: updatedOrder.total_price,
-          razorpayOrderId: updatedOrder.razorpay_order_id
+          razorpayOrderId: updatedOrder.razorpay_order_id,
+          displayId: getDisplayId(updatedOrder)
         }
       }).catch(e => console.error("Background Order Email Failed:", e));
 
@@ -304,7 +316,7 @@ export const updateOrderStatus = async (req, res) => {
         email: order.email,
         customerName: order.customer_name,
         status,
-        orderId: order.id.slice(0, 8),
+        orderId: getDisplayId(order),
         trackingNumber: trackingNumber || order.tracking_number,
         trackingId: trackingId || order.tracking_id
       }).catch(e => console.error("Background Status Email Failed:", e));

@@ -91,7 +91,8 @@ export const sendOrderEmails = async ({ order }) => {
     <p><strong>Customer:</strong> ${order.customer.name}</p>
     <p><strong>Email:</strong> ${order.customer.email}</p>
     <p><strong>Phone:</strong> ${order.customer.phone}</p>
-    <p><strong>Order ID:</strong> ${order.razorpayOrderId}</p>
+    <p><strong>Order ID:</strong> #${order.displayId || order.razorpayOrderId}</p>
+    <p><strong>Razorpay Order:</strong> ${order.razorpayOrderId}</p>
     <p><strong>Payment ID:</strong> ${order.razorpayPaymentId || "Pending"}</p>
     <h3 style="margin-top:24px;">Items</h3>
     ${orderTable}
@@ -104,7 +105,7 @@ export const sendOrderEmails = async ({ order }) => {
     <h2 style="font-family: 'Playfair Display', serif; color:#9b2241;">Thank you for your order!</h2>
     <p>Hello ${order.customer.name},</p>
     <p>We're delighted to confirm your XIVI order. Our artisans will begin preparing your silver pieces.</p>
-    <p><strong>Order reference:</strong> ${order.razorpayOrderId}</p>
+    <p><strong>Order ID:</strong> #${order.displayId || order.razorpayOrderId}</p>
     <h3 style="margin-top:24px;">Your Selection</h3>
     ${orderTable}
     <p style="margin-top:24px;"><strong>Total paid:</strong> ₹${order.amount.toLocaleString("en-IN")}</p>

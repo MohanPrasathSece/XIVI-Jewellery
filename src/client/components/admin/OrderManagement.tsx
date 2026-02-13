@@ -40,6 +40,18 @@ const OrderManagement = () => {
     const [confirmAction, setConfirmAction] = useState<{ type: 'status' | 'tracking' | 'cleanup', order: any, value?: string } | null>(null);
     const { toast } = useToast();
 
+    const getDisplayId = (order: any) => {
+        if (order.order_number) return order.order_number;
+        // Fallback: Generate a 4-digit number from UUID hash for visual consistency
+        let hash = 0;
+        const oId = order.id || "";
+        for (let i = 0; i < oId.length; i++) {
+            hash = ((hash << 5) - hash) + oId.charCodeAt(i);
+            hash |= 0;
+        }
+        return Math.abs(hash % 9000) + 1000;
+    };
+
     const fetchOrders = async () => {
         const { data } = await supabase
             .from("orders")
@@ -115,20 +127,30 @@ const OrderManagement = () => {
             return;
         }
 
-        const headers = ["Order ID", "Customer", "Email", "Phone", "Status", "Gifting", "Gift Price", "Total", "Date", "Time", "Address"];
-        const rows = filteredOrders.map(o => [
-            o.id,
-            `"${o.customer_name}"`,
-            o.email,
-            o.phone,
-            o.status,
-            `"${o.gift_option_name || 'None'}"`,
-            o.gift_option_price || 0,
-            o.total_price,
-            `"${new Date(o.created_at).getFullYear()}-${String(new Date(o.created_at).getMonth() + 1).padStart(2, '0')}-${String(new Date(o.created_at).getDate()).padStart(2, '0')}"`,
-            `"${new Date(o.created_at).getHours().toString().padStart(2, '0')}:${new Date(o.created_at).getMinutes().toString().padStart(2, '0')}:${new Date(o.created_at).getSeconds().toString().padStart(2, '0')}"`,
-            `"${o.address}"`
-        ]);
+        const headers = ["Order ID", "Customer", "Email", "Phone", "Status", "Products", "Gifting", "Gift Price", "Total", "Date", "Time", "Address"];
+        const rows = filteredOrders.map(o => {
+            let productsStr = "";
+            try {
+                const products = JSON.parse(o.products);
+                productsStr = products.map((p: any) => `${p.name} (x${p.quantity})`).join(" | ");
+            } catch (e) {
+                productsStr = "Error parsing products";
+            }
+            return [
+                getDisplayId(o),
+                `"${o.customer_name}"`,
+                o.email,
+                o.phone,
+                o.status,
+                `"${productsStr}"`,
+                `"${o.gift_option_name || 'None'}"`,
+                o.gift_option_price || 0,
+                o.total_price,
+                `"${new Date(o.created_at).getFullYear()}-${String(new Date(o.created_at).getMonth() + 1).padStart(2, '0')}-${String(new Date(o.created_at).getDate()).padStart(2, '0')}"`,
+                `"${new Date(o.created_at).getHours().toString().padStart(2, '0')}:${new Date(o.created_at).getMinutes().toString().padStart(2, '0')}:${new Date(o.created_at).getSeconds().toString().padStart(2, '0')}"`,
+                `"${o.address}"`
+            ];
+        });
 
         const csvContent = [headers, ...rows].map(e => e.join(",")).join("\n");
         const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
@@ -225,7 +247,7 @@ const OrderManagement = () => {
                         <tbody className="divide-y divide-slate-100">
                             {orders.map(order => (
                                 <tr key={order.id} className="hover:bg-slate-50 transition-colors">
-                                    <td className="px-4 md:px-6 py-4 font-mono text-xs text-slate-500">#{order.id.slice(0, 8)}</td>
+                                    <td className="px-4 md:px-6 py-4 font-bold text-xs text-slate-500">#{getDisplayId(order)}</td>
                                     <td className="px-4 md:px-6 py-4">
                                         <div className="font-bold text-slate-700">{order.customer_name}</div>
                                         <div className="text-xs text-slate-400">{order.email}</div>
@@ -259,7 +281,7 @@ const OrderManagement = () => {
                         <>
                             <DialogHeader>
                                 <div className="flex flex-col md:flex-row justify-between items-start gap-4 md:gap-0 pr-8">
-                                    <DialogTitle className="text-xl md:text-2xl">Order Details</DialogTitle>
+                                    <DialogTitle className="text-xl md:text-2xl">Order #{getDisplayId(selectedOrder)}</DialogTitle>
                                     <div className="flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full self-start md:self-auto">
                                         {statusIcons[selectedOrder.status]}
                                         <span className="text-sm font-bold">{selectedOrder.status}</span>
