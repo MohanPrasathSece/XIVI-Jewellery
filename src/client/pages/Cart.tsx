@@ -11,6 +11,7 @@ import { getApiUrl } from "@/lib/config";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { Gift } from "lucide-react";
 
 const formatter = new Intl.NumberFormat("en-IN", {
   style: "currency",
@@ -493,18 +494,23 @@ Please confirm my order. Thank you!`.trim();
                     {giftingOptions.length > 0 && (
                       <div className="space-y-3 pt-2">
                         <Label className="text-sm font-semibold">Gifting Options</Label>
-                        <div className="grid grid-cols-1 gap-2">
+                        <div className="grid grid-cols-2 gap-3">
                           <button
                             type="button"
                             onClick={() => setSelectedGiftOption(null)}
                             className={cn(
-                              "flex items-center justify-between p-3 rounded-xl border transition-all text-left",
+                              "flex flex-col p-3 rounded-2xl border transition-all text-left group",
                               !selectedGiftOption ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border hover:bg-slate-50"
                             )}
                             disabled={!hasItems || isProcessing}
                           >
-                            <span className="text-sm">No Gifting</span>
-                            <span className="text-xs text-muted-foreground">Free</span>
+                            <div className="w-full aspect-square rounded-xl bg-slate-50 flex items-center justify-center border border-slate-100 mb-3 group-hover:bg-white transition-colors">
+                              <Gift className="w-8 h-8 text-slate-300" />
+                            </div>
+                            <div className="mt-auto">
+                              <span className="text-xs font-bold text-slate-800 block">No Gifting</span>
+                              <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">Free</span>
+                            </div>
                           </button>
                           {giftingOptions.map((opt) => (
                             <button
@@ -512,16 +518,24 @@ Please confirm my order. Thank you!`.trim();
                               type="button"
                               onClick={() => setSelectedGiftOption(opt)}
                               className={cn(
-                                "flex items-center justify-between p-3 rounded-xl border transition-all text-left",
+                                "flex flex-col p-3 rounded-2xl border transition-all text-left group",
                                 selectedGiftOption?.id === opt.id ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border hover:bg-slate-50"
                               )}
                               disabled={!hasItems || isProcessing}
                             >
-                              <div className="flex flex-col">
-                                <span className="text-sm font-medium">{opt.name}</span>
-                                {opt.description && <span className="text-[10px] text-muted-foreground line-clamp-1">{opt.description}</span>}
+                              <div className="w-full aspect-square rounded-xl overflow-hidden border border-slate-100 mb-3 bg-white">
+                                {opt.image_url ? (
+                                  <img src={opt.image_url} alt={opt.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center bg-slate-50">
+                                    <Gift className="w-8 h-8 text-slate-200" />
+                                  </div>
+                                )}
                               </div>
-                              <span className="text-sm font-semibold text-primary">{formatter.format(opt.price)}</span>
+                              <div className="mt-auto space-y-0.5">
+                                <span className="text-xs font-bold text-slate-800 line-clamp-1">{opt.name}</span>
+                                <span className="text-[10px] text-primary font-bold">{formatter.format(opt.price)}</span>
+                              </div>
                             </button>
                           ))}
                         </div>

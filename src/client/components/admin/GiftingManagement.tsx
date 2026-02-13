@@ -12,7 +12,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Edit2, Trash2, Gift, Eye, EyeOff } from "lucide-react";
+import { Plus, Edit2, Trash2, Gift, Eye, EyeOff, ImagePlus, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface GiftingOption {
@@ -22,6 +22,7 @@ interface GiftingOption {
     price: number;
     is_active: boolean;
     allow_custom_text: boolean;
+    image_url?: string;
 }
 
 const GiftingManagement = () => {
@@ -37,6 +38,7 @@ const GiftingManagement = () => {
         price: 0,
         is_active: true,
         allow_custom_text: false,
+        image_url: "",
     });
 
     const fetchOptions = async () => {
@@ -79,6 +81,7 @@ const GiftingManagement = () => {
             price: formData.price,
             is_active: formData.is_active,
             allow_custom_text: formData.allow_custom_text,
+            image_url: formData.image_url,
         };
 
         try {
@@ -124,6 +127,7 @@ const GiftingManagement = () => {
             price: 0,
             is_active: true,
             allow_custom_text: false,
+            image_url: "",
         });
     };
 
@@ -135,8 +139,38 @@ const GiftingManagement = () => {
             price: option.price,
             is_active: option.is_active,
             allow_custom_text: option.allow_custom_text || false,
+            image_url: option.image_url || "",
         });
         setIsDialogOpen(true);
+    };
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setLoading(true);
+        try {
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Math.random()}.${fileExt}`;
+            const filePath = `gifting/${fileName}`;
+
+            const { error: uploadError } = await supabase.storage
+                .from('images')
+                .upload(filePath, file);
+
+            if (uploadError) throw uploadError;
+
+            const { data: { publicUrl } } = supabase.storage
+                .from('images')
+                .getPublicUrl(filePath);
+
+            setFormData(prev => ({ ...prev, image_url: publicUrl }));
+            toast({ title: "Image Uploaded" });
+        } catch (error: any) {
+            toast({ title: "Upload Failed", description: error.message, variant: "destructive" });
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -175,6 +209,28 @@ const GiftingManagement = () => {
                                     placeholder="Brief details about this gifting service..."
                                     className="rounded-xl border-slate-200"
                                 />
+                            </div>
+                            <div className="space-y-2">
+                                <Label>Gifting Image</Label>
+                                {formData.image_url ? (
+                                    <div className="relative w-full h-40 rounded-2xl overflow-hidden border border-slate-100 shadow-soft group/img">
+                                        <img src={formData.image_url} alt="Preview" className="w-full h-full object-cover" />
+                                        <button
+                                            type="button"
+                                            onClick={() => setFormData(prev => ({ ...prev, image_url: "" }))}
+                                            className="absolute top-2 right-2 p-2 bg-white/80 backdrop-blur-sm rounded-full text-red-500 hover:bg-red-50 transition-colors shadow-sm"
+                                        >
+                                            <X className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <Label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-slate-200 rounded-2xl cursor-pointer hover:bg-slate-50 transition-colors">
+                                        <ImagePlus className="w-8 h-8 text-slate-300" />
+                                        <span className="text-sm font-medium text-slate-500 mt-2">Upload image for this gift</span>
+                                        <span className="text-[10px] text-slate-400 mt-1">Suggested: 400x400px</span>
+                                        <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={loading} />
+                                    </Label>
+                                )}
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
@@ -228,8 +284,12 @@ const GiftingManagement = () => {
                     {options.map(option => (
                         <div key={option.id} className="bg-white rounded-3xl p-6 shadow-soft border border-slate-100 group transition-all hover:shadow-glow relative">
                             <div className="flex justify-between items-start mb-4">
-                                <div className="p-3 bg-primary/10 rounded-2xl text-primary">
-                                    <Gift className="w-6 h-6" />
+                                <div className="p-0.5 bg-primary/10 rounded-2xl text-primary overflow-hidden w-12 h-12 flex items-center justify-center border border-slate-100 shadow-sm">
+                                    {option.image_url ? (
+                                        <img src={option.image_url} alt={option.name} className="w-full h-full object-cover rounded-xl" />
+                                    ) : (
+                                        <Gift className="w-6 h-6" />
+                                    )}
                                 </div>
                                 <div className="flex gap-1">
                                     <button onClick={() => openEdit(option)} className="p-2 hover:bg-slate-100 rounded-lg text-slate-600"><Edit2 className="w-4 h-4" /></button>

@@ -37,7 +37,7 @@ const OrderManagement = () => {
     const [orders, setOrders] = useState<any[]>([]);
     const [selectedOrder, setSelectedOrder] = useState<any>(null);
     const [loading, setLoading] = useState(true);
-    const [confirmAction, setConfirmAction] = useState<{ type: 'status' | 'tracking', value?: string } | null>(null);
+    const [confirmAction, setConfirmAction] = useState<{ type: 'status' | 'tracking', order: any, value?: string } | null>(null);
     const { toast } = useToast();
 
     const fetchOrders = async () => {
@@ -60,7 +60,8 @@ const OrderManagement = () => {
         return () => { supabase.removeChannel(subscription); };
     }, []);
 
-    const updateStatus = async (orderId: string, newStatus: string) => {
+    const updateStatus = async (order: any, newStatus: string) => {
+        const orderId = order.id;
         try {
             const { error } = await supabase
                 .from("orders")
@@ -80,8 +81,8 @@ const OrderManagement = () => {
                 body: JSON.stringify({
                     orderId,
                     status: newStatus,
-                    trackingNumber: selectedOrder?.tracking_number || "",
-                    trackingId: selectedOrder?.tracking_id || ""
+                    trackingNumber: order.tracking_number || "",
+                    trackingId: order.tracking_id || ""
                 })
             });
 
@@ -249,7 +250,7 @@ const OrderManagement = () => {
                 </div>
             </div>
 
-            <Dialog open={!!selectedOrder} onOpenChange={() => setSelectedOrder(null)} modal={false}>
+            <Dialog open={!!selectedOrder} onOpenChange={() => setSelectedOrder(null)}>
                 <DialogContent className="max-w-4xl w-[95%] md:w-full bg-white rounded-3xl p-6 md:p-10 font-manrope admin-portal max-h-[90vh] overflow-y-auto">
                     {selectedOrder && (
                         <>
@@ -374,7 +375,7 @@ const OrderManagement = () => {
                                                 variant="outline"
                                                 size="sm"
                                                 disabled={isLocked}
-                                                onClick={() => setConfirmAction({ type: 'status', value: status })}
+                                                onClick={() => setConfirmAction({ type: 'status', order: selectedOrder, value: status })}
                                                 className={cn(
                                                     "transition-all px-4 rounded-full flex-1 md:flex-none",
                                                     isCompleted
@@ -418,7 +419,7 @@ const OrderManagement = () => {
                             className="bg-primary text-white rounded-full w-full md:w-auto"
                             onClick={() => {
                                 if (confirmAction?.type === 'status') {
-                                    updateStatus(selectedOrder.id, confirmAction.value!);
+                                    updateStatus(confirmAction.order, confirmAction.value!);
                                 }
                                 setConfirmAction(null);
                             }}
