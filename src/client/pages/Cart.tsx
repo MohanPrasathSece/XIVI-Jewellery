@@ -546,7 +546,7 @@ Please confirm my order. Thank you!`.trim();
 
                 <div className="space-y-3">
                   <Button
-                    className="w-full rounded-full bg-gradient-rose text-primary-foreground hover:shadow-glow"
+                    className="w-full rounded-full bg-gray-300 text-gray-600 hover:bg-gray-400 hover:text-gray-700"
                     disabled={!hasItems || isProcessing || isRazorpayLoading}
                     onClick={handleCheckout}
                   >
@@ -557,8 +557,8 @@ Please confirm my order. Thank you!`.trim();
                         : "Proceed to checkout"}
                   </Button>
                   <Button
-                    variant="ghost"
-                    className="w-full text-muted-foreground hover:text-primary"
+                    className="w-full rounded-full bg-gradient-rose text-primary-foreground hover:shadow-glow"
+                    disabled={!hasItems || isProcessing}
                     onClick={handleWhatsAppCheckout}
                   >
                     Checkout with WhatsApp
